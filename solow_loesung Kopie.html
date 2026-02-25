@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lösung – Aufgabe 4: Solow-Modell (26 Punkte)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #faf9f7;
+    --bg-card: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #5a5a5a;
+    --accent: #2d5a8e;
+    --accent-light: #e8f0fa;
+    --accent-dark: #1a3a5c;
+    --border: #e0ddd8;
+    --green: #2a7a4b;
+    --green-bg: #edf7f0;
+    --red: #b83c3c;
+    --red-bg: #fdf0f0;
+    --orange: #c67a1a;
+    --orange-bg: #fef6ec;
+    --purple: #6b4c9a;
+    --purple-bg: #f3eefa;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #1a3a5c 0%, #2d5a8e 50%, #3d7ab8 100%);
+    color: white;
+    padding: 3.5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    position: relative;
+    letter-spacing: -0.5px;
+  }
+  .hero .subtitle {
+    font-size: 1.15rem;
+    opacity: 0.85;
+    margin-top: 0.6rem;
+    position: relative;
+    font-weight: 300;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+    position: relative;
+    backdrop-filter: blur(4px);
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .nav-toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow);
+  }
+  .nav-toc h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    color: var(--accent-dark);
+  }
+  .nav-toc a {
+    display: block;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 0.3rem 0;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  .nav-toc a:hover { color: var(--accent-dark); text-decoration: underline; }
+
+  .section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem 2.2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--accent-light);
+  }
+  .section-header .num {
+    background: var(--accent);
+    color: white;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .section-header h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-dark);
+  }
+
+  h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.25rem;
+    color: var(--accent-dark);
+    margin: 1.5rem 0 0.8rem;
+  }
+
+  p { margin-bottom: 1rem; }
+
+  .formula-box {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    padding: 1.2rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.2rem 0;
+    overflow-x: auto;
+  }
+
+  .step-box {
+    background: #f8f8f6;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1rem 0;
+    position: relative;
+  }
+  .step-box .step-label {
+    position: absolute;
+    top: -10px; left: 16px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 1px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .insight {
+    border-left: 4px solid var(--green);
+    background: var(--green-bg);
+    padding: 1rem 1.3rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.2rem 0;
+    font-size: 0.95rem;
+  }
+  .insight strong { color: var(--green); }
+
+  .warning {
+    border-left: 4px solid var(--orange);
+    background: var(--orange-bg);
+    padding: 1rem 1.3rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.2rem 0;
+    font-size: 0.95rem;
+  }
+  .warning strong { color: var(--orange); }
+
+  .key-result {
+    border-left: 4px solid var(--purple);
+    background: var(--purple-bg);
+    padding: 1rem 1.3rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.2rem 0;
+  }
+  .key-result strong { color: var(--purple); }
+
+  /* Diagram Canvases */
+  .diagram-wrapper {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .diagram-wrapper canvas {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+  }
+  .diagram-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    color: var(--accent-dark);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  /* Table */
+  .result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+  }
+  .result-table th {
+    background: var(--accent);
+    color: white;
+    padding: 0.8rem 1rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  .result-table th:last-child { text-align: center; }
+  .result-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .result-table td:last-child {
+    text-align: center;
+    font-weight: 700;
+  }
+  .result-table tr:nth-child(even) { background: #fafaf8; }
+  .result-table .tag {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .tag-null { background: #e8e8e8; color: #555; }
+  .tag-neg { background: var(--red-bg); color: var(--red); }
+  .tag-pos { background: var(--green-bg); color: var(--green); }
+  .tag-unklar { background: var(--orange-bg); color: var(--orange); }
+
+  .explanation-row td {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    padding-top: 0.2rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    font-style: italic;
+  }
+
+  @media (max-width: 700px) {
+    .container { padding: 1rem; }
+    .section { padding: 1.3rem; }
+    .hero h1 { font-size: 1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Solow-Modell: Senkung der Sparquote</h1>
+  <div class="subtitle">Klausur Makroökonomik II – Aufgabe 4 (26 Punkte) — Vollständige Lösung</div>
+  <div class="badge">Konstante Bevölkerung N · Wachsende Technologie A · Cobb-Douglas</div>
+</div>
+
+<div class="container">
+
+<!-- TOC -->
+<div class="nav-toc">
+  <h3>📋 Inhaltsverzeichnis</h3>
+  <a href="#setup">0. Modell-Setup & Gegeben</a>
+  <a href="#a">a) Solow-Diagramm im Steady State (6 P.)</a>
+  <a href="#bi">b-i) Kurvenverschiebung bei Senkung von s auf s' (6 P.)</a>
+  <a href="#bii">b-ii) Zeitdiagramme: k_t, log(K/N), log(C/N) (9 P.)</a>
+  <a href="#biii">b-iii) Vergleichstabelle: Neuer vs. Alter Steady State (5 P.)</a>
+</div>
+
+<!-- ==================== SETUP ==================== -->
+<div class="section" id="setup">
+  <div class="section-header">
+    <div class="num">0</div>
+    <h2>Modell-Setup & Gegebene Gleichungen</h2>
+  </div>
+
+  <p>Wir betrachten das <strong>Solow-Modell der langen Frist</strong> mit:</p>
+
+  <div class="formula-box">
+    <strong>Produktionsfunktion (aggregiert):</strong>
+    $$F[K_t] = K_t^{\alpha}(A_t N)^{1-\alpha}$$
+  </div>
+
+  <div class="formula-box">
+    <strong>In effektiven Pro-Kopf-Einheiten:</strong>
+    $$f(k_t) = y_t = k_t^{\alpha} \quad \text{mit} \quad y_t = \frac{Y_t}{A_t N}, \quad k_t = \frac{K_t}{A_t N}$$
+  </div>
+
+  <div class="formula-box">
+    <strong>Fundamentalgleichung (Kapitalakkumulation):</strong>
+    $$\Delta k_t = k_{t+1} - k_t = s k_t^{\alpha} - (g_A + \delta) k_t$$
+  </div>
+
+  <div class="formula-box">
+    <strong>Konsum pro Kopf:</strong>
+    $$\frac{C_t}{N} = (1-s)\frac{Y_t}{N}$$
+  </div>
+
+  <p><strong>Annahmen:</strong> Bevölkerung \(N\) ist konstant (\(g_N = 0\)). Technologie \(A_t\) wächst mit konstanter Rate \(g_A > 0\). Sparquote \(1 > s > 0\), Abschreibungsrate \(\delta > 0\), Kapitaleinkommensquote \(0 < \alpha < 1\).</p>
+
+  <div class="insight">
+    <strong>💡 Merke:</strong> Alle Variablen mit kleinem Buchstaben (z.B. \(k_t, y_t\)) sind in <em>effektiven Pro-Kopf-Einheiten</em> ausgedrückt, d.h. normiert durch \(A_t \cdot N\). Diese sind im Steady State <strong>konstant</strong>. Die Pro-Kopf-Größen \(K_t/N, Y_t/N, C_t/N\) wachsen hingegen im Steady State mit der Rate \(g_A\).
+  </div>
+</div>
+
+<!-- ==================== TEIL a) ==================== -->
+<div class="section" id="a">
+  <div class="section-header">
+    <div class="num">a</div>
+    <h2>Solow-Diagramm im Steady State (6 Punkte)</h2>
+  </div>
+
+  <h3>Schritt 1: Steady-State-Bedingung herleiten</h3>
+  <p>Im Steady State ist der Kapitalbestand in effektiven Pro-Kopf-Einheiten <strong>konstant</strong>, also \(\Delta k_t = 0\):</p>
+
+  <div class="step-box">
+    <div class="step-label">SCHRITT 1</div>
+    <br>
+    $$\Delta k_t = 0 \;\Leftrightarrow\; s k_t^{\alpha} = (g_A + \delta) k_t$$
+    <p style="margin-top:0.8rem;">Die <strong>Bruttoinvestitionen</strong> in effektiven Pro-Kopf-Einheiten \(sk_t^{\alpha}\) müssen genau den <strong>effektiven Abschreibungen</strong> \((g_A + \delta)k_t\) entsprechen.</p>
+  </div>
+
+  <h3>Schritt 2: Steady-State-Werte berechnen</h3>
+  <div class="step-box">
+    <div class="step-label">SCHRITT 2</div>
+    <br>
+    $$sk^{*\alpha} = (g_A + \delta)k^* \;\;\Leftrightarrow\;\; s = (g_A + \delta) k^{*1-\alpha}$$
+    $$\Rightarrow \quad k^* = \left(\frac{s}{g_A + \delta}\right)^{\frac{1}{1-\alpha}}$$
+    <p style="margin-top:0.5rem;">Und daraus das Steady-State-Einkommen:</p>
+    $$y^* = (k^*)^{\alpha} = \left(\frac{s}{g_A + \delta}\right)^{\frac{\alpha}{1-\alpha}}$$
+  </div>
+
+  <h3>Schritt 3: Solow-Diagramm zeichnen</h3>
+  <p>Im \(k_t\)–\(y_t\)-Diagramm zeichnen wir drei Kurven:</p>
+  <p>
+    <strong>① Produktionsfunktion:</strong> \(y_t = k_t^{\alpha}\) — konkave, steigende Kurve (abnehmende Grenzerträge). <br>
+    <strong>② Investitionskurve:</strong> \(sk_t^{\alpha}\) — ein Anteil \(s\) der Produktion wird gespart/investiert. <br>
+    <strong>③ Effektive Abschreibung:</strong> \((g_A + \delta)k_t\) — eine Gerade durch den Ursprung mit Steigung \((g_A+\delta)\).
+  </p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram-title">Solow-Diagramm: Steady State (Aufgabe a)</div>
+    <canvas id="diagramA" width="700" height="460"></canvas>
+  </div>
+
+  <div class="insight">
+    <strong>💡 Erklärung:</strong> Der Schnittpunkt von \(sk_t^{\alpha}\) und \((g_A+\delta)k_t\) bestimmt den Steady State \(k^*\). Dort wird genau so viel investiert, wie an Kapital durch Abschreibungen und Technologiewachstum "verloren" geht. Die vertikale Distanz zwischen \(y_t = k_t^{\alpha}\) und \(sk_t^{\alpha}\) bei \(k^*\) ergibt den <strong>Konsum in effektiven Pro-Kopf-Einheiten</strong> \(c^* = (1-s)(k^*)^{\alpha}\).
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Klausur-Tipp:</strong> Vergiss nicht, <strong>alle Kurven zu beschriften</strong>, die Achsen korrekt zu benennen (\(k_t\) auf der x-Achse, \(y_t\) auf der y-Achse), und \(k^*\) und \(y^*\) durch gestrichelte Linien zu markieren!
+  </div>
+</div>
+
+<!-- ==================== TEIL b-i) ==================== -->
+<div class="section" id="bi">
+  <div class="section-header">
+    <div class="num">b-i</div>
+    <h2>Kurvenverschiebung: \(s\) sinkt auf \(s'\) (6 Punkte)</h2>
+  </div>
+
+  <h3>Schritt 1: Welche Kurven sind betroffen?</h3>
+  <div class="step-box">
+    <div class="step-label">ANALYSE</div>
+    <br>
+    <p><strong>Die Sparquote \(s\) taucht nur in der Investitionskurve auf:</strong></p>
+    <p>• Investitionskurve: \(sk_t^{\alpha} \;\longrightarrow\; s'k_t^{\alpha}\) — verschiebt sich <strong>nach unten</strong> (da \(s' < s\)).</p>
+    <p>• Produktionsfunktion \(k_t^{\alpha}\) — <strong>unverändert</strong> (hängt nicht von \(s\) ab).</p>
+    <p>• Effektive Abschreibung \((g_A+\delta)k_t\) — <strong>unverändert</strong> (hängt nicht von \(s\) ab).</p>
+  </div>
+
+  <h3>Schritt 2: Neuer Steady State</h3>
+  <div class="step-box">
+    <div class="step-label">SCHRITT 2</div>
+    <br>
+    $$k^{**} = \left(\frac{s'}{g_A + \delta}\right)^{\frac{1}{1-\alpha}} < k^* = \left(\frac{s}{g_A + \delta}\right)^{\frac{1}{1-\alpha}}$$
+    <p style="margin-top:0.5rem;">Da \(s' < s\), ist \(k^{**} < k^*\) und damit auch \(y^{**} < y^*\).</p>
+  </div>
+
+  <h3>Schritt 3: Anpassungsprozess</h3>
+  <p>Unmittelbar nach dem Schock befindet sich die Ökonomie noch bei \(k^*\). Dort gilt nun:</p>
+  <div class="formula-box">
+    $$s' (k^*)^{\alpha} < (g_A + \delta) k^* \quad \Rightarrow \quad \Delta k_t < 0$$
+  </div>
+  <p>Die Investitionen reichen <strong>nicht mehr aus</strong>, um die effektiven Abschreibungen zu decken. Der Kapitalbestand in effektiven Pro-Kopf-Einheiten <strong>sinkt</strong>, bis der neue Steady State \(k^{**}\) erreicht wird.</p>
+
+  <div class="diagram-wrapper">
+    <div class="diagram-title">Solow-Diagramm: Verschiebung durch Senkung der Sparquote (Aufgabe b-i)</div>
+    <canvas id="diagramBi" width="700" height="480"></canvas>
+  </div>
+
+  <div class="key-result">
+    <strong>🔑 Ergebnis:</strong> Eine Senkung der Sparquote von \(s\) auf \(s'\) führt zu einer Abwärtsverschiebung der Investitionskurve. Der neue Steady State \(k^{**}\) liegt links vom alten \(k^*\): sowohl der Kapitalbestand als auch das Einkommen in effektiven Pro-Kopf-Einheiten sind im neuen Gleichgewicht niedriger.
+  </div>
+</div>
+
+<!-- ==================== TEIL b-ii) ==================== -->
+<div class="section" id="bii">
+  <div class="section-header">
+    <div class="num">b-ii</div>
+    <h2>Zeitdiagramme (9 Punkte)</h2>
+  </div>
+
+  <p>Wir müssen drei Zeitdiagramme zeichnen: \(t - k_t\), \(t - \log(K_t/N)\) und \(t - \log(C_t/N)\). Der Schock tritt zum Zeitpunkt \(t_0\) ein.</p>
+
+  <!-- Diagram 1: t - k_t -->
+  <h3>Diagramm 1: \(t - k_t\) (Kapitalbestand in effektiven Pro-Kopf-Einheiten)</h3>
+
+  <div class="step-box">
+    <div class="step-label">LOGIK</div>
+    <br>
+    <p><strong>Vor dem Schock:</strong> \(k_t = k^*\) (konstant im Steady State).</p>
+    <p><strong>Bei \(t_0\):</strong> \(k_t\) ändert sich <strong>nicht sprunghaft</strong> — \(k_t\) ist eine Bestandsgröße (state variable).</p>
+    <p><strong>Nach \(t_0\):</strong> \(\Delta k_t < 0\), also sinkt \(k_t\) <strong>monoton</strong> von \(k^*\) auf \(k^{**}\).</p>
+    <p><strong>Im neuen SS:</strong> \(k_t = k^{**}\) (konstant).</p>
+  </div>
+
+  <div class="diagram-wrapper">
+    <div class="diagram-title">\(t - k_t\): Kapitalbestand in eff. Pro-Kopf-Einheiten</div>
+    <canvas id="diagramT_k" width="700" height="340"></canvas>
+  </div>
+
+  <!-- Diagram 2: t - log(K/N) -->
+  <h3>Diagramm 2: \(t - \log(K_t/N)\) (logarithmierter Kapitalbestand pro Kopf)</h3>
+
+  <div class="step-box">
+    <div class="step-label">HERLEITUNG</div>
+    <br>
+    <p>Es gilt: \(\frac{K_t}{N} = k_t \cdot A_t\), also:</p>
+    $$\log\!\left(\frac{K_t}{N}\right) = \log(k_t) + \log(A_t)$$
+    <p><strong>Vor dem Schock (alter SS):</strong> \(k_t = k^*\) konstant, \(\log(A_t)\) wächst linear mit Steigung \(g_A\).</p>
+    <p>→ \(\log(K_t/N)\) wächst <strong>linear mit Steigung \(g_A\)</strong>.</p>
+    <p><strong>Bei \(t_0\):</strong> Kein Sprung (weder \(k_t\) noch \(A_t\) ändern sich sprunghaft).</p>
+    <p><strong>Nach \(t_0\):</strong> \(k_t\) sinkt → \(\log(k_t)\) sinkt, aber \(\log(A_t)\) steigt weiter. Die Wachstumsrate von \(K_t/N\) ist <strong>vorübergehend kleiner als \(g_A\)</strong>.</p>
+    <p><strong>Im neuen SS:</strong> \(k_t = k^{**}\) konstant → \(\log(K_t/N)\) wächst wieder linear mit Steigung \(g_A\), aber auf einem <strong>niedrigeren Pfad</strong>.</p>
+  </div>
+
+  <div class="diagram-wrapper">
+    <div class="diagram-title">\(t - \log(K_t/N)\): Log. Kapitalbestand pro Kopf</div>
+    <canvas id="diagramT_logK" width="700" height="340"></canvas>
+  </div>
+
+  <!-- Diagram 3: t - log(C/N) -->
+  <h3>Diagramm 3: \(t - \log(C_t/N)\) (logarithmierter Konsum pro Kopf)</h3>
+
+  <div class="step-box">
+    <div class="step-label">HERLEITUNG</div>
+    <br>
+    <p>Es gilt:</p>
+    $$\frac{C_t}{N} = (1-s)\frac{Y_t}{N} = (1-s) \cdot A_t \cdot k_t^{\alpha}$$
+    $$\log\!\left(\frac{C_t}{N}\right) = \log(1-s) + \log(A_t) + \alpha \cdot \log(k_t)$$
+    <p><strong>Vor dem Schock:</strong> Wächst linear mit Steigung \(g_A\).</p>
+    <p><strong>Bei \(t_0\) — ACHTUNG, SPRUNG:</strong></p>
+    <p>\(k_t\) ändert sich <em>nicht</em>, aber die Sparquote springt von \(s\) auf \(s'\). Da \(s' < s\), gilt \((1-s') > (1-s)\).</p>
+    $$\frac{C_{t_0}}{N} = (1-s') \cdot A_{t_0} \cdot (k^*)^{\alpha} > (1-s) \cdot A_{t_0} \cdot (k^*)^{\alpha}$$
+    <p>→ \(\log(C_t/N)\) <strong>springt nach oben</strong>! (Weniger sparen = mehr konsumieren.)</p>
+    <p><strong>Nach \(t_0\):</strong> \(k_t\) sinkt → Wachstumsrate <strong>vorübergehend unter \(g_A\)</strong>.</p>
+    <p><strong>Im neuen SS:</strong> Wachstumsrate kehrt zu \(g_A\) zurück. Die Niveaufrage (ob höher oder niedriger als alter Trend) ist <strong>unklar</strong> — abhängig davon, ob die Ökonomie oberhalb oder unterhalb der Goldenen Regel lag.</p>
+  </div>
+
+  <div class="diagram-wrapper">
+    <div class="diagram-title">\(t - \log(C_t/N)\): Log. Konsum pro Kopf</div>
+    <canvas id="diagramT_logC" width="700" height="340"></canvas>
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Wichtig:</strong> Der Sprung nach oben bei \(\log(C_t/N)\) ist das entscheidende Detail, das viele Studierende vergessen! \(k_t\) ist eine Bestandsgröße und kann nicht springen — aber der Konsum hängt auch von der Sparquote ab, die sich sofort ändert. Deshalb springt der Konsum in \(t_0\) <strong>diskret nach oben</strong>.
+  </div>
+
+  <div class="warning">
+    <strong>⚠️ Niveaufrage bei \(\log(C_t/N)\):</strong> Ob der neue Pfad langfristig über oder unter dem alten liegt, hängt davon ab, ob \(s\) oberhalb oder unterhalb der Goldenen Regel lag. Da das nicht angegeben ist, kann man den neuen Pfad als „unklar" zeichnen (gestrichelt). In der Klausur reicht es, das zu vermerken.
+  </div>
+</div>
+
+<!-- ==================== TEIL b-iii) ==================== -->
+<div class="section" id="biii">
+  <div class="section-header">
+    <div class="num">b-iii</div>
+    <h2>Vergleichstabelle: Neuer vs. Alter Steady State (5 Punkte)</h2>
+  </div>
+
+  <p>Gefragt ist: Ist die <strong>Veränderung</strong> der Variable im neuen Steady State verglichen mit dem alten Steady State positiv, negativ, null oder unklar?</p>
+
+  <table class="result-table">
+    <thead>
+      <tr>
+        <th style="width:55%;">Variable</th>
+        <th style="width:20%;">Veränderung</th>
+        <th style="width:25%;">Ergebnis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Wachstumsrate von \(k_t\)</strong></td>
+        <td>\(0 \to 0\)</td>
+        <td><span class="tag tag-null">null</span></td>
+      </tr>
+      <tr class="explanation-row">
+        <td colspan="3">Im Steady State ist \(k_t\) konstant → Wachstumsrate = 0, sowohl im alten als auch im neuen SS.</td>
+      </tr>
+
+      <tr>
+        <td><strong>\(y_t\)</strong></td>
+        <td>\(y^{**} < y^*\)</td>
+        <td><span class="tag tag-neg">negativ</span></td>
+      </tr>
+      <tr class="explanation-row">
+        <td colspan="3">\(y^* = (k^*)^{\alpha}\). Da \(k^{**} < k^*\) (weil \(s' < s\)), folgt \(y^{**} < y^*\).</td>
+      </tr>
+
+      <tr>
+        <td><strong>Wachstumsrate von \(\frac{C_t}{N}\)</strong></td>
+        <td>\(g_A \to g_A\)</td>
+        <td><span class="tag tag-null">null</span></td>
+      </tr>
+      <tr class="explanation-row">
+        <td colspan="3">\(C_t/N = (1-s)A_t \cdot y_t\). Im SS ist \(y_t\) konstant → Wachstumsrate = \(g_A\) in beiden Steady States.</td>
+      </tr>
+
+      <tr>
+        <td><strong>\(A_t\)</strong></td>
+        <td>unverändert</td>
+        <td><span class="tag tag-null">null</span></td>
+      </tr>
+      <tr class="explanation-row">
+        <td colspan="3">\(A_t\) ist exogen gegeben und wächst mit \(g_A\). Die Senkung der Sparquote hat <strong>keinen Einfluss</strong> auf die Technologie.</td>
+      </tr>
+
+      <tr>
+        <td><strong>\(Y_t\)</strong></td>
+        <td>niedrigerer Pfad</td>
+        <td><span class="tag tag-neg">negativ</span></td>
+      </tr>
+      <tr class="explanation-row">
+        <td colspan="3">\(Y_t = A_t \cdot N \cdot y_t\). Da \(y^{**} < y^*\) und \(A_t, N\) unverändert sind, liegt \(Y_t\) auf einem <strong>dauerhaft niedrigeren Niveaupfad</strong>. Zu jedem Zeitpunkt \(t\) ist \(Y_t^{\text{neu}} < Y_t^{\text{alt}}\).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="key-result">
+    <strong>🔑 Zusammenfassung:</strong> Eine Senkung der Sparquote ändert im Solow-Modell <strong>nicht die langfristigen Wachstumsraten</strong> (die werden allein durch \(g_A\) bestimmt), sondern nur die <strong>Niveaus</strong> der Variablen. Der Kapitalbestand und das Einkommen in effektiven Pro-Kopf-Einheiten fallen dauerhaft, die Technologie bleibt unberührt.
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="section" style="border-left: 4px solid var(--accent); background: var(--accent-light);">
+  <h2 style="font-family: 'Crimson Pro', serif; color: var(--accent-dark); margin-bottom: 1rem;">📌 Kernaussagen für die Klausur</h2>
+  <p><strong>1.</strong> Im Solow-Modell mit technischem Fortschritt sind die Variablen in effektiven Pro-Kopf-Einheiten (\(k_t, y_t\)) im Steady State <strong>konstant</strong>.</p>
+  <p><strong>2.</strong> Die Pro-Kopf-Größen (\(K_t/N, Y_t/N, C_t/N\)) wachsen im SS mit der Rate \(g_A\).</p>
+  <p><strong>3.</strong> Eine Änderung der Sparquote verändert das <strong>Niveau</strong>, nicht die <strong>Wachstumsrate</strong> im Steady State.</p>
+  <p><strong>4.</strong> \(k_t\) ist eine Bestandsgröße und kann <strong>nicht springen</strong>. Der Konsum \(C_t/N\) kann dagegen springen, weil er direkt von \(s\) abhängt.</p>
+  <p><strong>5.</strong> Bei Senkung von \(s\): Investitionskurve verschiebt sich <strong>nach unten</strong> → neuer SS bei niedrigerem \(k^{**}, y^{**}\).</p>
+</div>
+
+</div> <!-- /container -->
+
+<script>
+// ============== DRAWING UTILITY FUNCTIONS ==============
+function setupCanvas(canvasId) {
+  const c = document.getElementById(canvasId);
+  const ctx = c.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const w = c.width; const h = c.height;
+  c.width = w * dpr; c.height = h * dpr;
+  c.style.width = w + 'px'; c.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+  return { ctx, w, h };
+}
+
+function drawArrow(ctx, x1, y1, x2, y2, color='#1a1a1a', lw=2) {
+  const headLen = 10;
+  const dx = x2 - x1, dy = y2 - y1;
+  const angle = Math.atan2(dy, dx);
+  ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.fillStyle = color;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - headLen * Math.cos(angle - 0.4), y2 - headLen * Math.sin(angle - 0.4));
+  ctx.lineTo(x2 - headLen * Math.cos(angle + 0.4), y2 - headLen * Math.sin(angle + 0.4));
+  ctx.closePath(); ctx.fill();
+}
+
+function dashedLine(ctx, x1, y1, x2, y2, color='#888', lw=1.2) {
+  ctx.setLineDash([5, 4]); ctx.strokeStyle = color; ctx.lineWidth = lw;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// ============== DIAGRAM A: Solow Steady State ==============
+(function() {
+  const { ctx, w, h } = setupCanvas('diagramA');
+  const ox = 80, oy = h - 60; // origin
+  const maxX = w - 40, maxY = 40;
+  const alpha = 0.35;
+  const s = 0.25;
+  const gd = 0.15; // g_A + delta
+
+  // Axes
+  drawArrow(ctx, ox, oy, maxX, oy, '#1a1a1a', 2);
+  drawArrow(ctx, ox, oy, ox, maxY, '#1a1a1a', 2);
+  ctx.font = '15px Source Sans 3'; ctx.fillStyle = '#1a1a1a';
+  ctx.fillText('kₜ', maxX - 15, oy + 25);
+  ctx.fillText('yₜ', ox - 30, maxY + 15);
+
+  // k* = (s/gd)^(1/(1-alpha))
+  const kStar = Math.pow(s / gd, 1 / (1 - alpha));
+  const yStar = Math.pow(kStar, alpha);
+  const kMax = kStar * 1.8; // show some space beyond k*
+
+  const scaleX = (maxX - ox - 30) / kMax;
+  const scaleY = (oy - maxY - 20) / (Math.pow(kMax, alpha) * 1.1);
+
+  function toX(k) { return ox + k * scaleX; }
+  function toY(y) { return oy - y * scaleY; }
+
+  // Production function: y = k^alpha
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let k = 0; k <= kMax; k += kMax/500) {
+    const x = toX(k), y = toY(Math.pow(k, alpha));
+    if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#2d5a8e'; ctx.font = 'italic 15px Crimson Pro';
+  ctx.fillText('yₜ = kₜᵅ', toX(kMax * 0.88), toY(Math.pow(kMax * 0.88, alpha)) - 14);
+
+  // Investment: s * k^alpha
+  ctx.strokeStyle = '#2a7a4b'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let k = 0; k <= kMax; k += kMax/500) {
+    const x = toX(k), y = toY(s * Math.pow(k, alpha));
+    if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#2a7a4b';
+  ctx.fillText('skₜᵅ', toX(kMax * 0.88), toY(s * Math.pow(kMax * 0.88, alpha)) - 10);
+
+  // Break-even: (g_A + delta) * k
+  ctx.strokeStyle = '#b83c3c'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(toX(0), toY(0));
+  ctx.lineTo(toX(kMax), toY(gd * kMax));
+  ctx.stroke();
+  ctx.fillStyle = '#b83c3c';
+  ctx.fillText('(gₐ+δ)kₜ', toX(kMax * 0.82), toY(gd * kMax * 0.82) - 10);
+
+  // Steady state markers
+  dashedLine(ctx, toX(kStar), oy, toX(kStar), toY(yStar), '#555', 1.5);
+  dashedLine(ctx, ox, toY(yStar), toX(kStar), toY(yStar), '#555', 1.5);
+  dashedLine(ctx, ox, toY(s * yStar), toX(kStar), toY(s * yStar), '#555', 1.5);
+
+  // Dot at intersection (investment = break-even)
+  ctx.fillStyle = '#b83c3c';
+  ctx.beginPath(); ctx.arc(toX(kStar), toY(gd * kStar), 5, 0, 2 * Math.PI); ctx.fill();
+
+  // Dot on production function
+  ctx.fillStyle = '#2d5a8e';
+  ctx.beginPath(); ctx.arc(toX(kStar), toY(yStar), 5, 0, 2 * Math.PI); ctx.fill();
+
+  // Labels
+  ctx.font = 'bold 14px Source Sans 3'; ctx.fillStyle = '#1a1a1a';
+  ctx.fillText('k*', toX(kStar) - 8, oy + 22);
+  ctx.fillText('y*', ox - 28, toY(yStar) + 5);
+  ctx.fillText('sy*', ox - 32, toY(s * yStar) + 5);
+
+  // Consumption bracket
+  const cX = toX(kStar) + 18;
+  ctx.strokeStyle = '#6b4c9a'; ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.moveTo(cX - 6, toY(yStar)); ctx.lineTo(cX, toY(yStar));
+  ctx.lineTo(cX, toY(s * yStar));
+  ctx.lineTo(cX - 6, toY(s * yStar));
+  ctx.stroke();
+  ctx.fillStyle = '#6b4c9a'; ctx.font = '13px Source Sans 3';
+  ctx.fillText('c*=(1-s)y*', cX + 5, (toY(yStar) + toY(s * yStar)) / 2 + 4);
+})();
+
+// ============== DIAGRAM B-i: Shift ==============
+(function() {
+  const { ctx, w, h } = setupCanvas('diagramBi');
+  const ox = 80, oy = h - 60;
+  const maxX = w - 40, maxY = 40;
+  const alpha = 0.35;
+  const s = 0.25, sNew = 0.15;
+  const gd = 0.15;
+
+  drawArrow(ctx, ox, oy, maxX, oy, '#1a1a1a', 2);
+  drawArrow(ctx, ox, oy, ox, maxY, '#1a1a1a', 2);
+  ctx.font = '15px Source Sans 3'; ctx.fillStyle = '#1a1a1a';
+  ctx.fillText('kₜ', maxX - 15, oy + 25);
+  ctx.fillText('yₜ', ox - 30, maxY + 15);
+
+  const kStar = Math.pow(s / gd, 1 / (1 - alpha));
+  const yStar = Math.pow(kStar, alpha);
+  const kNew = Math.pow(sNew / gd, 1 / (1 - alpha));
+  const yNew = Math.pow(kNew, alpha);
+  const kMax = kStar * 1.8;
+
+  const scaleX = (maxX - ox - 30) / kMax;
+  const scaleY = (oy - maxY - 20) / (Math.pow(kMax, alpha) * 1.1);
+  function toX(k) { return ox + k * scaleX; }
+  function toY(y) { return oy - y * scaleY; }
+
+  // Production function
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let k = 0; k <= kMax; k += kMax/500) {
+    const x = toX(k), y = toY(Math.pow(k, alpha));
+    if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#2d5a8e'; ctx.font = 'italic 15px Crimson Pro';
+  ctx.fillText('kₜᵅ', toX(kMax * 0.9), toY(Math.pow(kMax * 0.9, alpha)) - 14);
+
+  // OLD Investment (dashed)
+  ctx.strokeStyle = '#2a7a4b'; ctx.lineWidth = 1.8;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  for (let k = 0; k <= kMax; k += kMax/500) {
+    const x = toX(k), y = toY(s * Math.pow(k, alpha));
+    if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#2a7a4b'; ctx.font = '13px Source Sans 3';
+  ctx.fillText('skₜᵅ (alt)', toX(kMax * 0.82), toY(s * Math.pow(kMax * 0.82, alpha)) - 10);
+
+  // NEW Investment (solid)
+  ctx.strokeStyle = '#c67a1a'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let k = 0; k <= kMax; k += kMax/500) {
+    const x = toX(k), y = toY(sNew * Math.pow(k, alpha));
+    if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#c67a1a';
+  ctx.fillText("s'kₜᵅ (neu)", toX(kMax * 0.82), toY(sNew * Math.pow(kMax * 0.82, alpha)) - 10);
+
+  // Break-even
+  ctx.strokeStyle = '#b83c3c'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(toX(0), toY(0)); ctx.lineTo(toX(kMax), toY(gd * kMax)); ctx.stroke();
+  ctx.fillStyle = '#b83c3c'; ctx.font = '14px Source Sans 3';
+  ctx.fillText('(gₐ+δ)kₜ', toX(kMax * 0.78), toY(gd * kMax * 0.78) - 10);
+
+  // Old SS markers
+  dashedLine(ctx, toX(kStar), oy, toX(kStar), toY(yStar), '#aaa', 1.2);
+  dashedLine(ctx, ox, toY(yStar), toX(kStar), toY(yStar), '#aaa', 1.2);
+  ctx.fillStyle = '#555'; ctx.font = 'bold 13px Source Sans 3';
+  ctx.fillText('k*', toX(kStar) - 8, oy + 20);
+  ctx.fillText('y*', ox - 25, toY(yStar) + 4);
+
+  // New SS markers
+  dashedLine(ctx, toX(kNew), oy, toX(kNew), toY(yNew), '#c67a1a', 1.5);
+  dashedLine(ctx, ox, toY(yNew), toX(kNew), toY(yNew), '#c67a1a', 1.5);
+  ctx.fillStyle = '#c67a1a'; ctx.font = 'bold 14px Source Sans 3';
+  ctx.fillText('k**', toX(kNew) - 10, oy + 20);
+  ctx.fillText('y**', ox - 30, toY(yNew) + 4);
+
+  // Dots
+  ctx.fillStyle = '#888';
+  ctx.beginPath(); ctx.arc(toX(kStar), toY(gd * kStar), 5, 0, 2 * Math.PI); ctx.fill();
+  ctx.fillStyle = '#c67a1a';
+  ctx.beginPath(); ctx.arc(toX(kNew), toY(gd * kNew), 6, 0, 2 * Math.PI); ctx.fill();
+
+  // Arrow showing shift downward
+  const midK = kStar * 0.7;
+  const fromYp = toY(s * Math.pow(midK, alpha));
+  const toYpos = toY(sNew * Math.pow(midK, alpha));
+  drawArrow(ctx, toX(midK) + 12, fromYp + 5, toX(midK) + 12, toYpos - 3, '#c67a1a', 2);
+
+  // Arrow from old k* to new k**
+  drawArrow(ctx, toX(kStar) - 3, oy + 34, toX(kNew) + 3, oy + 34, '#c67a1a', 2);
+})();
+
+// ============== TIME DIAGRAMS ==============
+
+// Diagram t - k_t
+(function() {
+  const { ctx, w, h } = setupCanvas('diagramT_k');
+  const ox = 80, oy = h - 50, maxX = w - 30, maxY = 35;
+
+  drawArrow(ctx, ox, oy, maxX, oy, '#1a1a1a', 2);
+  drawArrow(ctx, ox, oy, ox, maxY, '#1a1a1a', 2);
+  ctx.font = '15px Source Sans 3'; ctx.fillStyle = '#1a1a1a';
+  ctx.fillText('t', maxX - 12, oy + 22);
+  ctx.fillText('kₜ', ox - 25, maxY + 15);
+
+  const t0 = ox + (maxX - ox) * 0.25;
+  const kStarY = oy - (oy - maxY) * 0.7;
+  const kNewY = oy - (oy - maxY) * 0.35;
+
+  // k* line before shock
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(ox, kStarY); ctx.lineTo(t0, kStarY); ctx.stroke();
+
+  // Transition
+  ctx.beginPath(); ctx.moveTo(t0, kStarY);
+  const endT = ox + (maxX - ox) * 0.85;
+  for (let t = 0; t <= 1; t += 0.005) {
+    const x = t0 + t * (endT - t0);
+    const y = kNewY + (kStarY - kNewY) * Math.exp(-4 * t);
+    ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // k** line after
+  ctx.beginPath(); ctx.moveTo(endT, kNewY); ctx.lineTo(maxX - 20, kNewY); ctx.stroke();
+
+  // Dashed lines
+  dashedLine(ctx, t0, oy, t0, kStarY, '#999', 1.2);
+  dashedLine(ctx, ox, kStarY, t0, kStarY, '#999', 1);
+  dashedLine(ctx, ox, kNewY, t0 + 50, kNewY, '#c67a1a', 1);
+
+  ctx.fillStyle = '#1a1a1a'; ctx.font = '13px Source Sans 3';
+  ctx.fillText('t₀', t0 - 5, oy + 18);
+  ctx.fillText('k*', ox - 22, kStarY + 5);
+  ctx.fillStyle = '#c67a1a';
+  ctx.fillText('k**', ox - 28, kNewY + 5);
+})();
+
+// Diagram t - log(K/N)
+(function() {
+  const { ctx, w, h } = setupCanvas('diagramT_logK');
+  const ox = 80, oy = h - 50, maxX = w - 30, maxY = 35;
+
+  drawArrow(ctx, ox, oy, maxX, oy, '#1a1a1a', 2);
+  drawArrow(ctx, ox, oy, ox, maxY, '#1a1a1a', 2);
+  ctx.font = '15px Source Sans 3'; ctx.fillStyle = '#1a1a1a';
+  ctx.fillText('t', maxX - 12, oy + 22);
+  ctx.fillText('log(Kₜ/N)', ox - 70, maxY + 15);
+
+  const t0 = ox + (maxX - ox) * 0.25;
+  const startY = oy - (oy - maxY) * 0.55;
+  const slope = -0.35; // negative because y goes down for larger values
+
+  // Old trend (dashed after t0)
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(ox, startY - slope * (ox - ox));
+  ctx.lineTo(t0, startY + slope * (t0 - ox));
+  ctx.stroke();
+
+  // Old trend continued (dashed)
+  ctx.setLineDash([5, 5]); ctx.lineWidth = 1.5; ctx.strokeStyle = '#aaa';
+  ctx.beginPath();
+  ctx.moveTo(t0, startY + slope * (t0 - ox));
+  ctx.lineTo(maxX - 20, startY + slope * (maxX - 20 - ox));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // New path with transition
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  const levelDrop = 40; // eventual drop
+  const endT = ox + (maxX - ox) * 0.85;
+  ctx.beginPath();
+  const t0Y = startY + slope * (t0 - ox);
+  ctx.moveTo(t0, t0Y);
+  for (let frac = 0; frac <= 1; frac += 0.005) {
+    const x = t0 + frac * (endT - t0);
+    const oldTrendY = startY + slope * (x - ox);
+    const drop = levelDrop * (1 - Math.exp(-4 * frac));
+    ctx.lineTo(x, oldTrendY + drop);
+  }
+  const finalEndY = startY + slope * (maxX - 20 - ox) + levelDrop;
+  ctx.lineTo(maxX - 20, finalEndY);
+  ctx.stroke();
+
+  // t0 line
+  dashedLine(ctx, t0, oy, t0, t0Y, '#999', 1.2);
+  ctx.fillStyle = '#1a1a1a'; ctx.font = '13px Source Sans 3';
+  ctx.fillText('t₀', t0 - 5, oy + 18);
+
+  // Labels
+  ctx.fillStyle = '#aaa'; ctx.font = '12px Source Sans 3';
+  ctx.fillText('alter Trend (Steigung gₐ)', maxX - 180, startY + slope * (maxX - 100 - ox) - 8);
+  ctx.fillStyle = '#2d5a8e';
+  ctx.fillText('neuer Pfad', maxX - 110, finalEndY - 8);
+  ctx.fillText('(Steigung gₐ)', maxX - 110, finalEndY + 8);
+})();
+
+// Diagram t - log(C/N)
+(function() {
+  const { ctx, w, h } = setupCanvas('diagramT_logC');
+  const ox = 80, oy = h - 50, maxX = w - 30, maxY = 35;
+
+  drawArrow(ctx, ox, oy, maxX, oy, '#1a1a1a', 2);
+  drawArrow(ctx, ox, oy, ox, maxY, '#1a1a1a', 2);
+  ctx.font = '15px Source Sans 3'; ctx.fillStyle = '#1a1a1a';
+  ctx.fillText('t', maxX - 12, oy + 22);
+  ctx.fillText('log(Cₜ/N)', ox - 70, maxY + 15);
+
+  const t0 = ox + (maxX - ox) * 0.25;
+  const startY = oy - (oy - maxY) * 0.5;
+  const slope = -0.35;
+
+  // Old trend
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(ox, startY);
+  ctx.lineTo(t0, startY + slope * (t0 - ox));
+  ctx.stroke();
+
+  // Old trend continued (dashed)
+  ctx.setLineDash([5, 5]); ctx.lineWidth = 1.5; ctx.strokeStyle = '#aaa';
+  ctx.beginPath();
+  ctx.moveTo(t0, startY + slope * (t0 - ox));
+  ctx.lineTo(maxX - 20, startY + slope * (maxX - 20 - ox));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Jump up at t0
+  const t0Y = startY + slope * (t0 - ox);
+  const jumpSize = -22; // jump up (negative because canvas y is inverted)
+  const jumpY = t0Y + jumpSize;
+
+  // Draw jump
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  dashedLine(ctx, t0, t0Y, t0, jumpY, '#2d5a8e', 2);
+
+  // Dot at old position
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(t0, t0Y, 4, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+
+  // Dot at new position (filled)
+  ctx.fillStyle = '#2d5a8e';
+  ctx.beginPath(); ctx.arc(t0, jumpY, 4, 0, 2 * Math.PI); ctx.fill();
+
+  // New path: starts at jump, then growth rate temporarily below g_A
+  // Final level is ambiguous - draw with dashed ending
+  const endT = ox + (maxX - ox) * 0.85;
+  const levelDrop = 25; // drop from the jumped position over time
+  ctx.strokeStyle = '#2d5a8e'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(t0, jumpY);
+  for (let frac = 0; frac <= 1; frac += 0.005) {
+    const x = t0 + frac * (endT - t0);
+    const trendFromJump = jumpY + slope * (x - t0);
+    const extraDrop = levelDrop * (1 - Math.exp(-4 * frac));
+    ctx.lineTo(x, trendFromJump + extraDrop);
+  }
+  const finalY = jumpY + slope * (maxX - 20 - t0) + levelDrop;
+  ctx.lineTo(maxX - 20, finalY);
+  ctx.stroke();
+
+  // t0 line
+  dashedLine(ctx, t0, oy, t0, t0Y + 5, '#999', 1.2);
+  ctx.fillStyle = '#1a1a1a'; ctx.font = '13px Source Sans 3';
+  ctx.fillText('t₀', t0 - 5, oy + 18);
+
+  // Jump annotation
+  ctx.fillStyle = '#b83c3c'; ctx.font = '12px Source Sans 3';
+  ctx.fillText('Sprung ↑', t0 + 8, jumpY + 3);
+  ctx.fillText('(1-s\') > (1-s)', t0 + 8, jumpY + 17);
+
+  // Labels
+  ctx.fillStyle = '#aaa'; ctx.font = '12px Source Sans 3';
+  ctx.fillText('alter Trend', maxX - 150, startY + slope * (maxX - 100 - ox) - 8);
+  ctx.fillStyle = '#2d5a8e'; ctx.font = '12px Source Sans 3';
+  ctx.fillText('neuer Pfad', maxX - 110, finalY - 12);
+  ctx.fillText('(Steigung gₐ)', maxX - 110, finalY + 2);
+
+  // Unklar annotation
+  ctx.fillStyle = '#c67a1a'; ctx.font = '11px Source Sans 3';
+  ctx.fillText('Endniveau ggü. altem Trend: unklar', maxX - 260, finalY + 25);
+})();
+</script>
+
+</body>
+</html>

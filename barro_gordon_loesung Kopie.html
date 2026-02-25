@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barro-Gordon Modell – Klausurlösung</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b24;
+    --surface2: #1e2230;
+    --border: #2a2e3d;
+    --text: #e8e6e3;
+    --text-dim: #9b9aa0;
+    --accent: #f0a050;
+    --accent2: #50b0f0;
+    --accent3: #70d080;
+    --accent4: #e06080;
+    --accent5: #b080e0;
+    --formula-bg: #1a1d28;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  .page-wrapper {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 60px 0 50px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 50px;
+  }
+  .header-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .header .subtitle {
+    color: var(--text-dim);
+    font-size: 15px;
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 56px;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+  .section p {
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  /* Given data box */
+  .given-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 24px 0;
+  }
+  .given-box h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+  .given-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 40px;
+  }
+  .given-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .given-item .label {
+    color: var(--text-dim);
+    font-size: 14px;
+    min-width: 200px;
+  }
+  .given-item .value {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Formula box */
+  .formula {
+    background: var(--formula-bg);
+    border-left: 3px solid var(--accent);
+    padding: 18px 24px;
+    margin: 18px 0;
+    border-radius: 0 8px 8px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    line-height: 2;
+    overflow-x: auto;
+  }
+  .formula .comment {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  /* Step boxes */
+  .step-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 20px 0;
+  }
+  .step-box.highlight {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(240,160,80,0.06), transparent);
+  }
+  .step-box.result {
+    border-color: var(--accent3);
+    background: linear-gradient(135deg, rgba(112,208,128,0.06), transparent);
+  }
+  .step-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+  .step-box h4 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  /* Point marker */
+  .point-marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-family: 'Crimson Pro', serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-right: 6px;
+  }
+  .point-A { background: var(--accent); color: var(--bg); }
+  .point-B { background: var(--accent2); color: var(--bg); }
+  .point-C { background: var(--accent4); color: var(--bg); }
+  .point-D { background: var(--accent3); color: var(--bg); }
+
+  /* Diagram container */
+  .diagram-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 28px 0;
+    text-align: center;
+  }
+  .diagram-container h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 16px;
+  }
+  .diagram-container canvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-swatch {
+    width: 20px;
+    height: 4px;
+    border-radius: 2px;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* Explanation callout */
+  .callout {
+    background: rgba(80,176,240,0.08);
+    border: 1px solid rgba(80,176,240,0.2);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .callout strong {
+    color: var(--accent2);
+  }
+
+  .callout.warn {
+    background: rgba(240,160,80,0.08);
+    border-color: rgba(240,160,80,0.2);
+  }
+  .callout.warn strong {
+    color: var(--accent);
+  }
+
+  /* Table */
+  .results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .results-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .results-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .results-table tr:last-child td { border-bottom: none; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .header h1 { font-size: 30px; }
+    .given-grid { grid-template-columns: 1fr; }
+    .page-wrapper { padding: 24px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-tag">Makroökonomik II · Klausurlösung</div>
+    <h1>Barro-Gordon Modell</h1>
+    <div class="subtitle">Aufgabe 2 · 18 Punkte · Klausur Februar 2024</div>
+  </div>
+
+  <!-- GEGEBENE DATEN -->
+  <div class="section">
+    <div class="section-label">Überblick</div>
+    <h2>Gegebene Informationen</h2>
+
+    <div class="given-box">
+      <h3>Modellparameter</h3>
+      <div class="given-grid">
+        <div class="given-item">
+          <span class="label">Phillipskurve:</span>
+          <span class="value">πₜ = πₜᵉ − (uₜ − uₙ)</span>
+        </div>
+        <div class="given-item">
+          <span class="label">Wohlfahrtsoptimum:</span>
+          <span class="value">πₜ / uₜ = 3/2</span>
+        </div>
+        <div class="given-item">
+          <span class="label">Inflationserwartungen (t=1):</span>
+          <span class="value">π₁ᵉ = 1%</span>
+        </div>
+        <div class="given-item">
+          <span class="label">Natürliche AL-Quote:</span>
+          <span class="value">uₙ = 2%</span>
+        </div>
+        <div class="given-item">
+          <span class="label">Erwartungsbildung:</span>
+          <span class="value">adaptiv (πₜ₊₁ᵉ = πₜ)</span>
+        </div>
+        <div class="given-item">
+          <span class="label">Zentralbank-Verhalten:</span>
+          <span class="value">kurzfristig wohlfahrtsoptimal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUFGABE a) -->
+  <div class="section">
+    <div class="section-label">Aufgabe a) · 2 Punkte</div>
+    <h2>Wohlfahrtsoptimale Kombinationen & natürliche AL-Quote</h2>
+
+    <p>Die Aufgabe verlangt, alle kurzfristig wohlfahrtsoptimalen Kombinationen aus πₜ und uₜ in ein Diagramm einzuzeichnen, sowie die natürliche Arbeitslosenquote uₙ.</p>
+
+    <div class="step-box">
+      <div class="step-label">Herleitung</div>
+      <h4>Die Wohlfahrtsgerade</h4>
+      <p>Das wohlfahrtsoptimale Verhältnis πₜ / uₜ = 3/2 lässt sich umstellen zu:</p>
+      <div class="formula">
+        πₜ = (3/2) · uₜ
+      </div>
+      <p>Das ist eine <strong>Ursprungsgerade mit der Steigung 3/2</strong>. Jeder Punkt auf dieser Geraden stellt eine kurzfristig optimale Abwägung zwischen Inflation und Arbeitslosigkeit dar.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Ökonomische Interpretation:</strong> Die Zentralbank ist bereit, für eine Senkung der Arbeitslosigkeit um 1 Prozentpunkt eine Inflationserhöhung von 1,5 Prozentpunkten in Kauf zu nehmen. Je steiler die Gerade, desto inflationstoleranter ist die Zentralbank – sie gewichtet Arbeitslosigkeit relativ stärker in ihrer Verlustfunktion.
+    </div>
+
+    <p>Einige Wertepunkte auf der Geraden:</p>
+    <table class="results-table">
+      <tr><th>uₜ</th><th>πₜ = (3/2)·uₜ</th></tr>
+      <tr><td>0%</td><td>0%</td></tr>
+      <tr><td>1%</td><td>1,5%</td></tr>
+      <tr><td>2%</td><td>3%</td></tr>
+      <tr><td>3%</td><td>4,5%</td></tr>
+      <tr><td>4%</td><td>6%</td></tr>
+    </table>
+
+    <p>Zusätzlich wird die <strong>natürliche Arbeitslosenquote uₙ = 2%</strong> als vertikale Linie eingezeichnet. Sie markiert die langfristige Arbeitslosenquote, die unabhängig von der Inflationsrate ist.</p>
+
+    <div class="diagram-container">
+      <h3>Diagramm a) – Wohlfahrtsgerade & uₙ</h3>
+      <canvas id="diagramA" width="600" height="500"></canvas>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent);"></div> Wohlfahrtsgerade πₜ = (3/2)uₜ</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--text-dim); border-style: dashed;"></div> uₙ = 2%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUFGABE b) -->
+  <div class="section">
+    <div class="section-label">Aufgabe b) · 4 Punkte</div>
+    <h2>Phillipskurve t = 1 und Punkt <span class="point-marker point-A">A</span></h2>
+
+    <p>Nun soll die kurzfristige Phillipskurve für Periode t = 1 eingezeichnet und der von der Zentralbank gewählte Punkt A bestimmt werden.</p>
+
+    <div class="step-box">
+      <div class="step-label">Schritt 1 – Phillipskurve aufstellen</div>
+      <h4>Phillipskurve für t = 1</h4>
+      <p>Mit π₁ᵉ = 1% und uₙ = 2% einsetzen:</p>
+      <div class="formula">
+        π₁ = π₁ᵉ − (u₁ − uₙ)<br>
+        π₁ = 1% − (u₁ − 2%)<br>
+        <strong>π₁ = 3% − u₁</strong>
+      </div>
+      <p>Das ist eine <strong>fallende Gerade mit Steigung −1</strong>, die die y-Achse bei 3% schneidet und die x-Achse bei 3%.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Warum fällt die Phillipskurve?</strong> Die kurzfristige Phillipskurve zeigt den Trade-off: Will die Zentralbank die Arbeitslosigkeit unter uₙ senken, muss sie eine Überraschungsinflation (π > πᵉ) erzeugen. Umgekehrt führt eine Inflation unter den Erwartungen zu höherer Arbeitslosigkeit.
+    </div>
+
+    <div class="step-box">
+      <div class="step-label">Schritt 2 – Schnittpunkt berechnen</div>
+      <h4>Punkt A: Wohlfahrtsgerade ∩ Phillipskurve</h4>
+      <p>Die Zentralbank wählt den Punkt, an dem die Phillipskurve die Wohlfahrtsgerade schneidet:</p>
+      <div class="formula">
+        <span class="comment">// Gleichsetzen:</span><br>
+        (3/2) · u₁ = 3% − u₁<br><br>
+        <span class="comment">// Auflösen nach u₁:</span><br>
+        (3/2)u₁ + u₁ = 3%<br>
+        (5/2) · u₁ = 3%<br>
+        <strong>u₁ = 6/5 = 1,2%</strong><br><br>
+        <span class="comment">// π₁ berechnen:</span><br>
+        π₁ = (3/2) · 1,2% = <strong>1,8%</strong>
+      </div>
+    </div>
+
+    <div class="step-box result">
+      <div class="step-label">Ergebnis</div>
+      <h4><span class="point-marker point-A">A</span> Punkt A = (u₁ = 1,2% ; π₁ = 1,8%)</h4>
+      <p>Die Zentralbank senkt die Arbeitslosigkeit unter uₙ = 2% auf nur 1,2%, erzeugt dafür aber eine Inflation von 1,8%, die über den Erwartungen (1%) liegt. Dies ist eine <strong>Überraschungsinflation</strong> – die Zentralbank weicht von den Erwartungen ab, um kurzfristig die Arbeitslosigkeit zu reduzieren.</p>
+    </div>
+
+    <div class="diagram-container">
+      <h3>Diagramm b) – Phillipskurve t=1 & Punkt A</h3>
+      <canvas id="diagramB" width="600" height="500"></canvas>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent);"></div> Wohlfahrtsgerade</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent2);"></div> PC₁ (πᵉ = 1%)</div>
+        <div class="legend-item"><div class="legend-dot point-A"></div> Punkt A (1,2% | 1,8%)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUFGABE c) -->
+  <div class="section">
+    <div class="section-label">Aufgabe c) · 4 Punkte</div>
+    <h2>Phillipskurve t = 2 und Punkt <span class="point-marker point-B">B</span></h2>
+
+    <p>Die Erwartungen passen sich adaptiv an: Die Akteure beobachten, dass die tatsächliche Inflation in t=1 bei 1,8% lag, und erwarten für t=2 genau diesen Wert.</p>
+
+    <div class="step-box">
+      <div class="step-label">Schritt 1 – Neue Erwartungen</div>
+      <h4>Adaptive Erwartungen</h4>
+      <div class="formula">
+        π₂ᵉ = π₁ = 1,8%
+      </div>
+      <p>Die Phillipskurve <strong>verschiebt sich nach oben</strong>, weil die Inflationserwartungen gestiegen sind.</p>
+    </div>
+
+    <div class="step-box">
+      <div class="step-label">Schritt 2 – Neue Phillipskurve</div>
+      <h4>Phillipskurve für t = 2</h4>
+      <div class="formula">
+        π₂ = 1,8% − (u₂ − 2%)<br>
+        <strong>π₂ = 3,8% − u₂</strong>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-label">Schritt 3 – Schnittpunkt berechnen</div>
+      <h4>Punkt B: Wohlfahrtsgerade ∩ PC₂</h4>
+      <div class="formula">
+        (3/2) · u₂ = 3,8% − u₂<br>
+        (5/2) · u₂ = 3,8%<br>
+        <strong>u₂ = 1,52%</strong><br><br>
+        π₂ = (3/2) · 1,52% = <strong>2,28%</strong>
+      </div>
+    </div>
+
+    <div class="step-box result">
+      <div class="step-label">Ergebnis</div>
+      <h4><span class="point-marker point-B">B</span> Punkt B = (u₂ = 1,52% ; π₂ = 2,28%)</h4>
+      <p>Erneut erzeugt die Zentralbank eine Überraschungsinflation (2,28% > 1,8% = πᵉ₂). Die Arbeitslosigkeit liegt wieder unter uₙ, aber die Inflation ist weiter gestiegen. Das zeigt die <strong>Inflationsspirale</strong>: Jede Runde erhöhter Inflation führt zu höheren Erwartungen, die die Phillipskurve weiter nach oben schieben.</p>
+    </div>
+
+    <div class="callout warn">
+      <strong>Muster erkennen:</strong> Von A nach B steigen sowohl Inflation (1,8% → 2,28%) als auch Arbeitslosigkeit (1,2% → 1,52%). Die Zentralbank „gewinnt" in jeder Runde weniger hinzu – der kurzfristige Vorteil der Überraschungsinflation schrumpft, während die Kosten (höhere Inflation) steigen.
+    </div>
+
+    <div class="diagram-container">
+      <h3>Diagramm c) – Phillipskurve t=2 & Punkt B</h3>
+      <canvas id="diagramC" width="600" height="500"></canvas>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent);"></div> Wohlfahrtsgerade</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent2); opacity: 0.4;"></div> PC₁ (πᵉ = 1%)</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent2);"></div> PC₂ (πᵉ = 1,8%)</div>
+        <div class="legend-item"><div class="legend-dot point-A"></div> Punkt A</div>
+        <div class="legend-item"><div class="legend-dot point-B"></div> Punkt B</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUFGABE d) -->
+  <div class="section">
+    <div class="section-label">Aufgabe d) · 4 Punkte</div>
+    <h2>Mittelfristiges Gleichgewicht – Punkt <span class="point-marker point-C">C</span></h2>
+
+    <p>Im mittelfristigen Gleichgewicht werden die Erwartungen erfüllt: Es gibt keine Überraschungsinflation mehr, und die Akteure haben keinen Grund, ihre Erwartungen weiter anzupassen.</p>
+
+    <div class="step-box">
+      <div class="step-label">Bedingung</div>
+      <h4>Definition: Mittelfristiges Gleichgewicht</h4>
+      <p>Im mittelfristigen Gleichgewicht gilt:</p>
+      <div class="formula">
+        πₜ = πₜᵉ <span class="comment">  // Erwartungen werden erfüllt</span>
+      </div>
+      <p>Setzt man dies in die Phillipskurve ein:</p>
+      <div class="formula">
+        πₜ = πₜᵉ − (uₜ − uₙ)<br>
+        πₜ = πₜ − (uₜ − uₙ)<br>
+        0 = −(uₜ − uₙ)<br>
+        <strong>⇒ uₜ = uₙ = 2%</strong>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Zentrale Erkenntnis:</strong> Im mittelfristigen Gleichgewicht liegt die Arbeitslosigkeit <em>immer</em> bei der natürlichen Rate uₙ. Die Überraschungsinflation kann die Arbeitslosigkeit nur kurzfristig unter uₙ drücken. Mittelfristig kehrt sie auf uₙ zurück – mit dem „Preis" einer dauerhaft höheren Inflation.
+    </div>
+
+    <div class="step-box">
+      <div class="step-label">Berechnung</div>
+      <h4>Punkt C auf der Wohlfahrtsgeraden bei uₜ = uₙ</h4>
+      <p>Da die Zentralbank weiterhin wohlfahrtsoptimal agiert und uₜ = 2%:</p>
+      <div class="formula">
+        πₜ = (3/2) · uₙ = (3/2) · 2% = <strong>3%</strong>
+      </div>
+      <p>Die zugehörige Phillipskurve mit πᵉ = 3%:</p>
+      <div class="formula">
+        π = 3% − (u − 2%) = <strong>5% − u</strong>
+      </div>
+    </div>
+
+    <div class="step-box result">
+      <div class="step-label">Ergebnis</div>
+      <h4><span class="point-marker point-C">C</span> Punkt C = (uₜ = 2% ; πₜ = 3%)</h4>
+      <p>Das ist das <strong>strategische Gleichgewicht (Inflationsbias)</strong>. Die Zentralbank hat keinen Anreiz mehr abzuweichen, weil die Erwartungen genau der tatsächlichen Inflation entsprechen. Allerdings zahlt die Gesellschaft den Preis einer Inflation von 3%, ohne dass die Arbeitslosigkeit unter uₙ gesunken ist – ein reiner Wohlfahrtsverlust.</p>
+    </div>
+
+    <div class="diagram-container">
+      <h3>Diagramm d) – Mittelfristiges GGW & Punkt C</h3>
+      <canvas id="diagramD" width="600" height="500"></canvas>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent);"></div> Wohlfahrtsgerade</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent2); opacity: 0.3;"></div> PC₁</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent2); opacity: 0.6;"></div> PC₂</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent4);"></div> PC (mittelfristig, πᵉ = 3%)</div>
+        <div class="legend-item"><div class="legend-dot point-A"></div> A</div>
+        <div class="legend-item"><div class="legend-dot point-B"></div> B</div>
+        <div class="legend-item"><div class="legend-dot point-C"></div> C</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUFGABE e) -->
+  <div class="section">
+    <div class="section-label">Aufgabe e) · 4 Punkte</div>
+    <h2>Glaubwürdige Politik für π = 0 – Punkt <span class="point-marker point-D">D</span></h2>
+
+    <p>Nun soll die Zentralbank ein mittelfristig stabiles Gleichgewicht mit <strong>πₜ = 0</strong> erreichen. Dafür muss sie von der Wohlfahrtsgeraden abweichen können.</p>
+
+    <div class="step-box">
+      <div class="step-label">Analyse</div>
+      <h4>Welche Politik ist nötig?</h4>
+      <p>Die Zentralbank muss eine <strong>Regelbindung (rules-based policy)</strong> ankündigen, bei der sie sich glaubhaft verpflichtet, <strong>ausschließlich Preisstabilität</strong> zu verfolgen. Konkret heißt das:</p>
+      <div class="formula">
+        Zentralbank setzt: πₜ = 0 für alle t<br>
+        <span class="comment">// Die Zentralbank gewichtet nur Inflation, nicht Arbeitslosigkeit</span><br>
+        <span class="comment">// Äquivalent zu: πₜ/uₜ = 0 (statt 3/2)</span>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-label">Wirkungsmechanismus</div>
+      <h4>Warum funktioniert das?</h4>
+      <p>Wenn die Ankündigung <strong>glaubwürdig</strong> ist, passen die privaten Akteure ihre Erwartungen an:</p>
+      <div class="formula">
+        πᵉ = 0 <span class="comment">  // Akteure glauben der Zentralbank</span><br><br>
+        <span class="comment">// Phillipskurve wird zu:</span><br>
+        π = 0 − (u − 2%) = 2% − u<br><br>
+        <span class="comment">// Zentralbank setzt π = 0:</span><br>
+        0 = 2% − u  ⇒  <strong>u = 2% = uₙ</strong>
+      </div>
+    </div>
+
+    <div class="step-box result">
+      <div class="step-label">Ergebnis</div>
+      <h4><span class="point-marker point-D">D</span> Punkt D = (uₜ = 2% ; πₜ = 0%)</h4>
+      <p>Die Gesellschaft erreicht <strong>Preisstabilität bei der natürlichen Arbeitslosenquote</strong>. Punkt D ist besser als Punkt C: Beide haben u = 2%, aber D hat π = 0% statt 3%. Der Wohlfahrtsverlust ist geringer!</p>
+    </div>
+
+    <div class="callout">
+      <strong>Kernaussage des Barro-Gordon Modells:</strong> Diskretionäre Geldpolitik (Wohlfahrtsoptimierung in jeder Periode) führt zum Inflationsbias in C. Eine glaubwürdige Regelbindung vermeidet diesen und erreicht das bessere Ergebnis D. Das Argument ist ein starkes Plädoyer für <strong>unabhängige Zentralbanken mit klarem Inflationsziel</strong> – wie die EZB.
+    </div>
+
+    <div class="callout warn">
+      <strong>Klausurtipp – Glaubwürdigkeit:</strong> Die Regelbindung muss <em>glaubwürdig</em> sein. Wenn die Akteure vermuten, dass die Zentralbank doch abweichen könnte, setzen sie πᵉ > 0 und das Gleichgewicht D bricht zusammen. Instrumente der Glaubwürdigkeit: gesetzliche Unabhängigkeit, Inflationsziel im Mandat, konservativer Zentralbankchef (Rogoff-Lösung).
+    </div>
+
+    <div class="diagram-container">
+      <h3>Diagramm e) – Vollständiges Diagramm mit allen Punkten</h3>
+      <canvas id="diagramE" width="600" height="550"></canvas>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent);"></div> Wohlfahrtsgerade πₜ=(3/2)uₜ</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent2); opacity: 0.35;"></div> PC₁ (πᵉ=1%)</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent2); opacity: 0.6;"></div> PC₂ (πᵉ=1,8%)</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent4);"></div> PC_C (πᵉ=3%)</div>
+        <div class="legend-item"><div class="legend-swatch" style="background: var(--accent3);"></div> PC_D (πᵉ=0%)</div>
+        <div class="legend-item"><div class="legend-dot point-A"></div> A</div>
+        <div class="legend-item"><div class="legend-dot point-B"></div> B</div>
+        <div class="legend-item"><div class="legend-dot point-C"></div> C</div>
+        <div class="legend-item"><div class="legend-dot point-D"></div> D</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZUSAMMENFASSUNG -->
+  <div class="section">
+    <div class="section-label">Zusammenfassung</div>
+    <h2>Alle Punkte im Überblick</h2>
+
+    <table class="results-table">
+      <tr>
+        <th>Punkt</th>
+        <th>uₜ</th>
+        <th>πₜ</th>
+        <th>πᵉₜ</th>
+        <th>Beschreibung</th>
+      </tr>
+      <tr>
+        <td><span class="point-marker point-A">A</span></td>
+        <td>1,20%</td>
+        <td>1,80%</td>
+        <td>1,00%</td>
+        <td>Kurzfristiges Optimum t=1 (Überraschungsinflation)</td>
+      </tr>
+      <tr>
+        <td><span class="point-marker point-B">B</span></td>
+        <td>1,52%</td>
+        <td>2,28%</td>
+        <td>1,80%</td>
+        <td>Kurzfristiges Optimum t=2 (Erwartungen angepasst)</td>
+      </tr>
+      <tr>
+        <td><span class="point-marker point-C">C</span></td>
+        <td>2,00%</td>
+        <td>3,00%</td>
+        <td>3,00%</td>
+        <td>Mittelfristiges GGW (Inflationsbias)</td>
+      </tr>
+      <tr>
+        <td><span class="point-marker point-D">D</span></td>
+        <td>2,00%</td>
+        <td>0,00%</td>
+        <td>0,00%</td>
+        <td>Mittelfristiges GGW mit Regelbindung</td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <strong>Die „Reise" durch das Modell:</strong> Die Ökonomie startet in A mit niedriger Arbeitslosigkeit dank Überraschungsinflation. Über B wandert sie entlang der Wohlfahrtsgeraden nach C – dem strategischen Gleichgewicht mit Inflationsbias. Nur durch eine glaubwürdige Regelbindung kann D erreicht werden, wo Preisstabilität ohne zusätzliche Arbeitslosigkeit herrscht.
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== DIAGRAM DRAWING ENGINE =====
+const COLORS = {
+  bg: '#181b24',
+  grid: '#252939',
+  axis: '#e8e6e3',
+  axisLabel: '#9b9aa0',
+  welfare: '#f0a050',
+  pc1: '#50b0f0',
+  pc2: '#6dc0f5',
+  pcC: '#e06080',
+  pcD: '#70d080',
+  un: '#9b9aa0',
+  pointA: '#f0a050',
+  pointB: '#50b0f0',
+  pointC: '#e06080',
+  pointD: '#70d080',
+};
+
+function setupCanvas(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  // Use the CSS attribute dimensions
+  const w = canvas.width;
+  const h = canvas.height;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx, w, h };
+}
+
+function drawDiagram(canvasId, options) {
+  const { ctx, w, h } = setupCanvas(canvasId);
+  const margin = { top: 30, right: 30, bottom: 50, left: 55 };
+  const pw = w - margin.left - margin.right;
+  const ph = h - margin.top - margin.bottom;
+
+  const maxX = 7; // u in %
+  const maxY = 7; // π in %
+
+  function toX(u) { return margin.left + (u / maxX) * pw; }
+  function toY(pi) { return margin.top + ph - (pi / maxY) * ph; }
+
+  // Background
+  ctx.fillStyle = COLORS.bg;
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = COLORS.grid;
+  ctx.lineWidth = 0.5;
+  for (let i = 1; i <= 6; i++) {
+    ctx.beginPath();
+    ctx.moveTo(toX(i), margin.top);
+    ctx.lineTo(toX(i), margin.top + ph);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(margin.left, toY(i));
+    ctx.lineTo(margin.left + pw, toY(i));
+    ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = COLORS.axis;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(margin.left, margin.top);
+  ctx.lineTo(margin.left, margin.top + ph);
+  ctx.lineTo(margin.left + pw, margin.top + ph);
+  ctx.stroke();
+
+  // Arrow heads
+  ctx.fillStyle = COLORS.axis;
+  // Y-axis arrow
+  ctx.beginPath();
+  ctx.moveTo(margin.left - 5, margin.top + 5);
+  ctx.lineTo(margin.left, margin.top - 5);
+  ctx.lineTo(margin.left + 5, margin.top + 5);
+  ctx.fill();
+  // X-axis arrow
+  ctx.beginPath();
+  ctx.moveTo(margin.left + pw - 5, margin.top + ph - 5);
+  ctx.lineTo(margin.left + pw + 5, margin.top + ph);
+  ctx.lineTo(margin.left + pw - 5, margin.top + ph + 5);
+  ctx.fill();
+
+  // Axis labels
+  ctx.fillStyle = COLORS.axisLabel;
+  ctx.font = '13px "DM Sans", sans-serif';
+  ctx.textAlign = 'center';
+  for (let i = 1; i <= 6; i++) {
+    ctx.fillText(i + '%', toX(i), margin.top + ph + 22);
+  }
+  ctx.textAlign = 'right';
+  for (let i = 1; i <= 6; i++) {
+    ctx.fillText(i + '%', margin.left - 10, toY(i) + 4);
+  }
+
+  // Axis titles
+  ctx.fillStyle = COLORS.axis;
+  ctx.font = '14px "DM Sans", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('uₜ', margin.left + pw + 15, margin.top + ph + 5);
+  ctx.save();
+  ctx.translate(16, margin.top + ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('πₜ', 0, 0);
+  ctx.restore();
+
+  // Helper: draw line
+  function drawLine(x1, y1, x2, y2, color, width, dash) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width || 2;
+    ctx.setLineDash(dash || []);
+    ctx.beginPath();
+    ctx.moveTo(toX(x1), toY(y1));
+    ctx.lineTo(toX(x2), toY(y2));
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Helper: draw point
+  function drawPoint(u, pi, color, label, labelPos) {
+    const x = toX(u);
+    const y = toY(pi);
+    // Outer glow
+    ctx.fillStyle = color + '30';
+    ctx.beginPath();
+    ctx.arc(x, y, 12, 0, Math.PI * 2);
+    ctx.fill();
+    // Point
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
+    ctx.fill();
+    // White center
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+    // Label
+    if (label) {
+      ctx.fillStyle = color;
+      ctx.font = 'bold 16px "Crimson Pro", serif';
+      ctx.textAlign = 'center';
+      const offsets = labelPos || { x: 0, y: -18 };
+      ctx.fillText(label, x + offsets.x, y + offsets.y);
+    }
+  }
+
+  // Helper: draw dashed line for coordinates
+  function drawCoordLines(u, pi, color) {
+    ctx.strokeStyle = color + '50';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(toX(u), toY(pi));
+    ctx.lineTo(toX(u), toY(0));
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(toX(u), toY(pi));
+    ctx.lineTo(toX(0), toY(pi));
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // uₙ vertical line (always)
+  drawLine(2, 0, 2, maxY, COLORS.un, 1.5, [6, 4]);
+  ctx.fillStyle = COLORS.un;
+  ctx.font = '12px "JetBrains Mono", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('uₙ=2%', toX(2), margin.top - 8);
+
+  // Welfare line (always)
+  drawLine(0, 0, maxY * 2 / 3, maxY, COLORS.welfare, 2.5);
+  ctx.fillStyle = COLORS.welfare;
+  ctx.font = '12px "JetBrains Mono", monospace';
+  ctx.textAlign = 'left';
+  const wlx = Math.min(maxY * 2 / 3, 4.5);
+  ctx.fillText('π=(3/2)u', toX(wlx) + 8, toY(wlx * 1.5) - 4);
+
+  // PC and points per diagram
+  if (options.pc1) {
+    const alpha = options.pc1Dim ? 0.35 : 1;
+    const c = `rgba(80,176,240,${alpha})`;
+    drawLine(0, 3, 3, 0, c, 2);
+    if (!options.pc1Dim) {
+      ctx.fillStyle = c;
+      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('PC₁ (πᵉ=1%)', toX(0.1), toY(3) - 8);
+    }
+  }
+
+  if (options.pc2) {
+    const alpha = options.pc2Dim ? 0.5 : 1;
+    const c = `rgba(80,176,240,${alpha})`;
+    drawLine(0, 3.8, 3.8, 0, c, 2);
+    if (!options.pc2Dim) {
+      ctx.fillStyle = c;
+      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('PC₂ (πᵉ=1,8%)', toX(0.1), toY(3.8) - 8);
+    }
+  }
+
+  if (options.pcC) {
+    drawLine(0, 5, 5, 0, COLORS.pcC, 2);
+    ctx.fillStyle = COLORS.pcC;
+    ctx.font = '11px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('PC_C (πᵉ=3%)', toX(0.1), toY(5) - 8);
+  }
+
+  if (options.pcD) {
+    drawLine(0, 2, 2, 0, COLORS.pcD, 2);
+    ctx.fillStyle = COLORS.pcD;
+    ctx.font = '11px "JetBrains Mono", monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText('PC_D (πᵉ=0%)', toX(1.9), toY(2) + 20);
+  }
+
+  // Points
+  if (options.pointA) {
+    drawCoordLines(1.2, 1.8, COLORS.pointA);
+    drawPoint(1.2, 1.8, COLORS.pointA, 'A', { x: -14, y: -14 });
+  }
+  if (options.pointB) {
+    drawCoordLines(1.52, 2.28, COLORS.pointB);
+    drawPoint(1.52, 2.28, COLORS.pointB, 'B', { x: -14, y: -14 });
+  }
+  if (options.pointC) {
+    drawCoordLines(2, 3, COLORS.pointC);
+    drawPoint(2, 3, COLORS.pointC, 'C', { x: 16, y: -10 });
+  }
+  if (options.pointD) {
+    drawCoordLines(2, 0, COLORS.pointD);
+    drawPoint(2, 0, COLORS.pointD, 'D', { x: 16, y: -14 });
+  }
+
+  // Arrow from A to B to C if requested
+  if (options.showPath) {
+    ctx.strokeStyle = '#ffffff30';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 5]);
+    ctx.beginPath();
+    ctx.moveTo(toX(1.2), toY(1.8));
+    ctx.lineTo(toX(1.52), toY(2.28));
+    ctx.lineTo(toX(2), toY(3));
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+// Draw all diagrams
+drawDiagram('diagramA', {});
+drawDiagram('diagramB', { pc1: true, pointA: true });
+drawDiagram('diagramC', { pc1: true, pc1Dim: true, pc2: true, pointA: true, pointB: true });
+drawDiagram('diagramD', { pc1: true, pc1Dim: true, pc2: true, pc2Dim: true, pcC: true, pointA: true, pointB: true, pointC: true, showPath: true });
+drawDiagram('diagramE', { pc1: true, pc1Dim: true, pc2: true, pc2Dim: true, pcC: true, pcD: true, pointA: true, pointB: true, pointC: true, pointD: true, showPath: true });
+</script>
+
+</body>
+</html>

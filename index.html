@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makro 2 – Klausurlösungen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #181b24;
+      --surface2: #1e2230;
+      --border: #2a2e3d;
+      --text: #e8e6e3;
+      --text-dim: #9b9aa0;
+      --accent: #f0a050;
+      --accent2: #50b0f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    .page-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 60px 0 50px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 50px;
+    }
+    .header-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 42px;
+      font-weight: 300;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .header .subtitle {
+      color: var(--text-dim);
+      font-size: 15px;
+    }
+
+    .aufgaben-list {
+      list-style: none;
+    }
+    .aufgaben-list li {
+      margin-bottom: 16px;
+    }
+    .aufgaben-list a {
+      display: block;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .aufgaben-list a:hover {
+      background: var(--surface2);
+      border-color: var(--accent);
+      color: var(--accent2);
+    }
+    .aufgaben-list .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="header">
+      <div class="header-tag">Übersicht</div>
+      <h1>Makro 2 – Klausurlösungen</h1>
+      <p class="subtitle">Wähle eine Aufgabe zum Ansehen.</p>
+    </header>
+
+    <ul class="aufgaben-list">
+      <li>
+        <a href="loesung_aufgabe1%20Kopie.html">
+          <span class="label">Aufgabe 1</span>
+          IS-LM Offene Volkswirtschaft
+        </a>
+      </li>
+      <li>
+        <a href="barro_gordon_loesung%20Kopie.html">
+          <span class="label">Aufgabe 2</span>
+          Barro-Gordon Modell
+        </a>
+      </li>
+      <li>
+        <a href="loesung_aufgabe3%20Kopie.html">
+          <span class="label">Aufgabe 3</span>
+          Staatliche Budgetrestriktion &amp; Schuldenquote
+        </a>
+      </li>
+      <li>
+        <a href="solow_loesung%20Kopie.html">
+          <span class="label">Aufgabe 4</span>
+          Solow-Modell: Senkung der Sparquote
+        </a>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lösung – Aufgabe 3: Staatliche Budgetrestriktion</title>
+<style>
+  :root {
+    --primary: #1a365d;
+    --accent: #2b6cb0;
+    --highlight: #ebf4ff;
+    --success: #276749;
+    --success-bg: #f0fff4;
+    --warning: #975a16;
+    --warning-bg: #fffff0;
+    --border: #cbd5e0;
+    --text: #2d3748;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    background: #f7fafc;
+  }
+  h1 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  h2 {
+    font-size: 1.35rem;
+    color: var(--primary);
+    margin: 2rem 0 0.75rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid var(--accent);
+  }
+  h3 {
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin: 1.5rem 0 0.5rem;
+  }
+  p { margin-bottom: 0.75rem; }
+
+  /* Gegebene Daten Box */
+  .given-box {
+    background: var(--highlight);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .given-box ul { list-style: none; padding: 0; }
+  .given-box li {
+    padding: 0.2rem 0;
+    font-size: 1.05rem;
+  }
+  .given-box li::before { content: "▸ "; color: var(--accent); font-weight: bold; }
+
+  /* Formel-Box */
+  .formula-box {
+    background: #fff;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    text-align: center;
+    font-size: 1.15rem;
+  }
+  .formula-box .label {
+    font-size: 0.85rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+
+  /* Schritt-Boxen */
+  .step {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .step-number {
+    background: var(--accent);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .step-title { font-weight: 600; color: var(--primary); font-size: 1.05rem; }
+  .calc {
+    background: #fafafa;
+    border-left: 3px solid var(--accent);
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    font-family: 'Cambria Math', 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 2;
+  }
+  .calc .line { display: block; }
+  .result {
+    color: var(--success);
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  .explanation {
+    background: var(--warning-bg);
+    border-left: 3px solid var(--warning);
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    font-size: 0.95rem;
+    color: #744210;
+  }
+  .explanation strong { color: #975a16; }
+
+  /* Ergebnis-Tabelle */
+  .result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 1.05rem;
+  }
+  .result-table th {
+    background: var(--primary);
+    color: #fff;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  .result-table td {
+    padding: 0.65rem 1rem;
+    text-align: center;
+    border: 1px solid var(--border);
+  }
+  .result-table tr:nth-child(even) td { background: #f7fafc; }
+  .result-table tr:hover td { background: var(--highlight); }
+  .result-table .highlight-cell {
+    background: var(--success-bg) !important;
+    font-weight: bold;
+    color: var(--success);
+  }
+
+  /* Teil b Box */
+  .answer-box {
+    background: var(--success-bg);
+    border: 2px solid var(--success);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+  }
+
+  /* Zusammenfassung */
+  .summary {
+    background: linear-gradient(135deg, var(--highlight), #fff);
+    border: 2px solid var(--accent);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .summary h3 { color: var(--primary); margin-top: 0; }
+
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+  .tag-info { background: var(--highlight); color: var(--accent); }
+  .tag-result { background: var(--success-bg); color: var(--success); }
+
+  sub, sup { font-size: 0.75em; }
+</style>
+</head>
+<body>
+
+<h1>Aufgabe 3 – Staatliche Budgetrestriktion &amp; Schuldenquote (15 Punkte)</h1>
+
+<!-- ===== GEGEBENE DATEN ===== -->
+<h2>📋 Gegebene Daten</h2>
+<div class="given-box">
+  <ul>
+    <li><strong>B<sub>0</sub> = 0</strong> — Schuldenstand zum Zeitpunkt t = 0 ist Null</li>
+    <li><strong>T = 200</strong> — Nettosteuern (Steuern − Transfers) sind in <em>allen</em> Perioden konstant</li>
+    <li><strong>r = 10% = 0,1</strong> — Realzins ist konstant</li>
+    <li><strong>P = 1</strong> — Preisniveau ist konstant (in Teil a)</li>
+    <li><strong>G<sub>0</sub> = 200</strong> — Staatsausgaben zum Zeitpunkt t = 0</li>
+    <li><strong>G<sub>1</sub> = 300</strong> — Staatsausgaben werden ab t = 1 auf 300 erhöht</li>
+    <li><strong>Primärdefizit in t = 2:</strong> G<sub>2</sub> − T<sub>2</sub> = 0</li>
+    <li><strong>Tilgung in t = 3:</strong> B<sub>3</sub> = 0 (Schuld soll vollständig getilgt werden)</li>
+  </ul>
+</div>
+
+<!-- ===== ZENTRALE FORMEL ===== -->
+<h2>📐 Zentrale Formel: Staatliche Budgetrestriktion</h2>
+<div class="formula-box">
+  <div class="label">Fortschreibung des Schuldenstands</div>
+  <strong>B<sub>t</sub> = (1 + r) · B<sub>t−1</sub> + (G<sub>t</sub> − T<sub>t</sub>)</strong>
+</div>
+<p>
+  Diese Formel sagt: Der <strong>neue Schuldenstand B<sub>t</sub></strong> ergibt sich aus dem alten Schuldenstand <strong>B<sub>t−1</sub></strong>
+  multipliziert mit dem Faktor <strong>(1 + r)</strong> (also alter Schuldenstand plus aufgelaufene Zinsen),
+  zuzüglich des <strong>Primärdefizits (G<sub>t</sub> − T<sub>t</sub>)</strong>.
+</p>
+<div class="explanation">
+  <strong>💡 Intuition:</strong> Der Staat muss zunächst Zinsen auf die bestehende Schuld zahlen – daher
+  wird B<sub>t−1</sub> mit (1 + r) multipliziert. Zusätzlich erhöht ein positives Primärdefizit
+  (Ausgaben > Steuern) die Schuld weiter; ein Primärüberschuss (Steuern > Ausgaben) reduziert sie.
+</div>
+
+<!-- ===== TEIL A ===== -->
+<h2>Teil a) Tabelle ausfüllen <span class="tag tag-info">12 Punkte</span></h2>
+
+<!-- PERIODE 1 -->
+<h3>Periode t = 1</h3>
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">1</div>
+    <div class="step-title">Staatsausgaben G<sub>1</sub> bestimmen</div>
+  </div>
+  <p>Laut Aufgabe beschließt die Regierung, die Staatsausgaben ab t = 1 von 200 auf 300 zu erhöhen.</p>
+  <div class="calc">
+    <span class="line"><span class="result">G<sub>1</sub> = 300</span></span>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">2</div>
+    <div class="step-title">Primärdefizit G<sub>1</sub> − T<sub>1</sub> berechnen</div>
+  </div>
+  <p>Das Primärdefizit ist die Differenz aus Staatsausgaben und Nettosteuern:</p>
+  <div class="calc">
+    <span class="line">G<sub>1</sub> − T<sub>1</sub> = 300 − 200 = <span class="result">100</span></span>
+  </div>
+  <div class="explanation">
+    <strong>💡 Bedeutung:</strong> Ein Primärdefizit von 100 heißt: Die Regierung gibt 100 Einheiten <em>mehr</em>
+    aus als sie über Steuern einnimmt. Diese Lücke muss durch neue Verschuldung finanziert werden.
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">3</div>
+    <div class="step-title">Vorperioden-Schuldenstand B<sub>0</sub></div>
+  </div>
+  <p>Gegeben: Am Zeitpunkt t = 0 hat der Staat keinen Schuldenstand.</p>
+  <div class="calc">
+    <span class="line"><span class="result">B<sub>0</sub> = 0</span></span>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">4</div>
+    <div class="step-title">Neuen Schuldenstand B<sub>1</sub> berechnen</div>
+  </div>
+  <p>Jetzt setzen wir alles in die Budgetrestriktion ein:</p>
+  <div class="calc">
+    <span class="line">B<sub>1</sub> = (1 + r) · B<sub>0</sub> + (G<sub>1</sub> − T<sub>1</sub>)</span>
+    <span class="line">B<sub>1</sub> = (1 + 0,1) · 0 + (300 − 200)</span>
+    <span class="line">B<sub>1</sub> = 1,1 · 0 + 100</span>
+    <span class="line">B<sub>1</sub> = 0 + 100</span>
+    <span class="line"><span class="result">B<sub>1</sub> = 100</span></span>
+  </div>
+  <div class="explanation">
+    <strong>💡 Erklärung:</strong> Da es vorher keine Schulden gab (B<sub>0</sub> = 0), fallen auch keine Zinsen an.
+    Der gesamte neue Schuldenstand kommt allein aus dem Primärdefizit von 100.
+  </div>
+</div>
+
+<!-- PERIODE 2 -->
+<h3>Periode t = 2</h3>
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">5</div>
+    <div class="step-title">Primärdefizit in t = 2: G<sub>2</sub> − T<sub>2</sub> = 0</div>
+  </div>
+  <p>Die Aufgabe sagt explizit: Zum Zeitpunkt t = 2 sei das Primärdefizit gleich Null.</p>
+  <div class="calc">
+    <span class="line">G<sub>2</sub> − T<sub>2</sub> = 0</span>
+    <span class="line">⟹ G<sub>2</sub> = T<sub>2</sub> = 200</span>
+    <span class="line"><span class="result">G<sub>2</sub> = 200</span></span>
+  </div>
+  <div class="explanation">
+    <strong>💡 Bedeutung:</strong> „Primärdefizit = 0" heißt, dass die Regierung genau so viel ausgibt wie sie
+    einnimmt – <em>ohne die Zinszahlungen</em>. Die Staatsausgaben werden also wieder auf 200 zurückgefahren,
+    um die Nettosteuern genau zu decken. Aber die Zinsen auf die bestehende Schuld laufen weiter!
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">6</div>
+    <div class="step-title">Neuen Schuldenstand B<sub>2</sub> berechnen</div>
+  </div>
+  <div class="calc">
+    <span class="line">B<sub>2</sub> = (1 + r) · B<sub>1</sub> + (G<sub>2</sub> − T<sub>2</sub>)</span>
+    <span class="line">B<sub>2</sub> = (1 + 0,1) · 100 + 0</span>
+    <span class="line">B<sub>2</sub> = 1,1 · 100 + 0</span>
+    <span class="line"><span class="result">B<sub>2</sub> = 110</span></span>
+  </div>
+  <div class="explanation">
+    <strong>💡 Erklärung:</strong> Obwohl das Primärdefizit null ist, <em>wächst</em> die Schuld trotzdem – nämlich
+    um die Zinsen! 10% von 100 = 10 zusätzliche Schulden. Das ist ein zentraler Punkt:
+    <strong>Selbst ohne neues Primärdefizit steigt die Verschuldung durch die Zinsbelastung.</strong>
+    Das sogenannte „Schneeballeffekt"-Risiko der Staatsverschuldung.
+  </div>
+</div>
+
+<!-- PERIODE 3 -->
+<h3>Periode t = 3</h3>
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">7</div>
+    <div class="step-title">Bedingung: Schuld soll vollständig getilgt werden → B<sub>3</sub> = 0</div>
+  </div>
+  <p>
+    Die Regierung plant, die gesamte Schuld bis t = 3 zurückzuzahlen. Also muss gelten: <strong>B<sub>3</sub> = 0</strong>.
+    Wir lösen die Formel nach G<sub>3</sub> auf:
+  </p>
+  <div class="calc">
+    <span class="line">B<sub>3</sub> = (1 + r) · B<sub>2</sub> + (G<sub>3</sub> − T<sub>3</sub>) = 0</span>
+    <span class="line">0 = 1,1 · 110 + G<sub>3</sub> − 200</span>
+    <span class="line">0 = 121 + G<sub>3</sub> − 200</span>
+    <span class="line">0 = G<sub>3</sub> − 79</span>
+    <span class="line"><span class="result">G<sub>3</sub> = 79</span></span>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">8</div>
+    <div class="step-title">Primärdefizit in t = 3 bestimmen</div>
+  </div>
+  <div class="calc">
+    <span class="line">G<sub>3</sub> − T<sub>3</sub> = 79 − 200 = <span class="result">−121</span></span>
+  </div>
+  <div class="explanation">
+    <strong>💡 Erklärung:</strong> Ein Primärdefizit von <strong>−121</strong> ist ein <strong>Primärüberschuss</strong> von 121.
+    Die Regierung muss also die Staatsausgaben drastisch auf nur 79 senken, um bei Steuereinnahmen
+    von 200 genug Überschuss zu erwirtschaften, um sowohl die Schuld von 110 als auch die Zinsen
+    darauf (11) vollständig zurückzuzahlen. Der benötigte Betrag ist genau (1 + r) · B<sub>2</sub> = 1,1 · 110 = 121.
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">9</div>
+    <div class="step-title">Kontrolle: B<sub>3</sub> = 0?</div>
+  </div>
+  <div class="calc">
+    <span class="line">B<sub>3</sub> = (1 + 0,1) · 110 + (79 − 200)</span>
+    <span class="line">B<sub>3</sub> = 121 + (−121)</span>
+    <span class="line"><span class="result">B<sub>3</sub> = 0 ✓</span></span>
+  </div>
+</div>
+
+<!-- ERGEBNIS-TABELLE -->
+<h3>✅ Ausgefüllte Tabelle</h3>
+<table class="result-table">
+  <thead>
+    <tr>
+      <th>Periode t</th>
+      <th>G<sub>t</sub></th>
+      <th>G<sub>t</sub> − T<sub>t</sub></th>
+      <th>B<sub>t−1</sub></th>
+      <th>B<sub>t</sub> = (1+r)B<sub>t−1</sub> + G<sub>t</sub> − T<sub>t</sub></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1</strong></td>
+      <td>300</td>
+      <td>100</td>
+      <td>0</td>
+      <td class="highlight-cell">100</td>
+    </tr>
+    <tr>
+      <td><strong>2</strong></td>
+      <td>200</td>
+      <td>0</td>
+      <td>100</td>
+      <td class="highlight-cell">110</td>
+    </tr>
+    <tr>
+      <td><strong>3</strong></td>
+      <td>79</td>
+      <td>−121</td>
+      <td>110</td>
+      <td class="highlight-cell">0</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ===== TEIL B ===== -->
+<h2>Teil b) Preisniveauanstieg und Schuldenquote <span class="tag tag-info">5 Punkte</span></h2>
+
+<div class="formula-box">
+  <div class="label">Definition der Schuldenquote</div>
+  <strong>b<sub>t</sub> = B<sub>t</sub> / (P<sub>t</sub> · Y<sub>t</sub>)</strong>
+</div>
+
+<p>
+  Die Schuldenquote setzt den <strong>nominalen Schuldenstand B<sub>t</sub></strong> ins Verhältnis zum
+  <strong>nominalen BIP (P<sub>t</sub> · Y<sub>t</sub>)</strong>.
+</p>
+
+<div class="step">
+  <div class="step-header">
+    <div class="step-number">1</div>
+    <div class="step-title">Was passiert bei einem exogenen Preisniveauanstieg in t = 2?</div>
+  </div>
+  <p>
+    Nehmen wir an, das Preisniveau steigt in Periode 2 einmalig von P = 1 auf P = P' > 1
+    und bleibt danach auf diesem höheren Niveau.
+  </p>
+
+  <p><strong>Auswirkung auf den Zähler (B<sub>2</sub>):</strong></p>
+  <p>
+    Der <strong>nominale Schuldenstand B<sub>2</sub></strong> ändert sich durch den Preisniveauanstieg <em>nicht</em>.
+    Die Staatsschulden sind in nominalen Größen festgelegt – der Staat schuldet weiterhin den
+    gleichen Geldbetrag. Die Berechnung B<sub>2</sub> = (1+r)·B<sub>1</sub> + (G<sub>2</sub> − T<sub>2</sub>) = 110
+    bleibt also unverändert.
+  </p>
+
+  <p><strong>Auswirkung auf den Nenner (P<sub>2</sub> · Y<sub>2</sub>):</strong></p>
+  <p>
+    Durch den Anstieg des Preisniveaus auf P' > 1 steigt das <strong>nominale BIP</strong> (P·Y),
+    selbst wenn das reale BIP (Y) unverändert bleibt. Der Nenner der Schuldenquote wird also <em>größer</em>.
+  </p>
+</div>
+
+<div class="answer-box">
+  <h3>📝 Musterlösung Teil b)</h3>
+  <p>
+    <strong>Die Schuldenquote b<sub>2</sub> sinkt.</strong>
+  </p>
+  <p>
+    <strong>Begründung:</strong> Die Schuldenquote ist definiert als b<sub>2</sub> = B<sub>2</sub> / (P<sub>2</sub> · Y<sub>2</sub>).
+    Ein exogener Anstieg des Preisniveaus (P<sub>2</sub> > 1) erhöht den Nenner (das nominale BIP),
+    während der Zähler (der nominale Schuldenstand B<sub>2</sub> = 110) unverändert bleibt,
+    da die bestehenden Schulden nominal fixiert sind. Somit sinkt der Quotient.
+  </p>
+  <p>
+    Anders ausgedrückt: Inflation <strong>entwertet die reale Schuldenlast</strong>. Der reale Wert
+    der Schulden B<sub>2</sub>/P<sub>2</sub> sinkt, weil die Schulden auf einen festen Nominalbetrag lauten,
+    während die Preise steigen. Das ist der Mechanismus, durch den Länder mit hoher Inflation
+    ceteris paribus eine sinkende reale Staatsverschuldung aufweisen.
+  </p>
+</div>
+
+<div class="explanation">
+  <strong>💡 Klausurtipp:</strong> Das Vorlesungsskript betont explizit: „In Ländern mit hoher Inflation
+  nimmt die reale Staatsverschuldung ceteris paribus ab." Dieser Zusammenhang wird hier abgefragt.
+  Der Schlüssel ist die Unterscheidung zwischen <em>nominalem</em> Schuldenstand (fixiert) und
+  <em>realem</em> Schuldenstand bzw. Schuldenquote (sinkt durch Preisniveauanstieg).
+</div>
+
+<!-- ===== ZUSAMMENFASSUNG ===== -->
+<div class="summary">
+  <h3>🎯 Zusammenfassung der wichtigsten Konzepte</h3>
+  <p><strong>1. Budgetrestriktion:</strong>
+    B<sub>t</sub> = (1+r) · B<sub>t−1</sub> + (G<sub>t</sub> − T<sub>t</sub>) — der Schuldenstand wächst durch Zinsen und Primärdefizit.</p>
+  <p><strong>2. Schneeballeffekt:</strong>
+    Selbst bei Primärdefizit = 0 wachsen die Schulden durch Zinsen (Periode 2: 100 → 110).</p>
+  <p><strong>3. Tilgung erfordert Primärüberschuss:</strong>
+    Um die Schuld zu tilgen, muss der Staat einen Primärüberschuss von (1+r)·B<sub>t−1</sub> erzielen (Periode 3: −121).</p>
+  <p><strong>4. Inflation senkt die Schuldenquote:</strong>
+    Da Schulden nominal fixiert sind, reduziert ein Preisniveauanstieg den realen Wert der Schuld und damit b = B/(P·Y).</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lösung Aufgabe 1 – IS-LM Offene Volkswirtschaft (Klausur Feb 2024)</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --bg-card: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #5a5a5a;
+    --accent: #b44a2f;
+    --accent-light: #e8d5cc;
+    --blue: #2a5a8c;
+    --blue-light: #d4e3f0;
+    --green: #2d6a4f;
+    --green-light: #d4edda;
+    --border: #e0dbd4;
+    --shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 18px;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  header h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  header .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .model-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin: 32px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .model-box h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .model-box .equation {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--text);
+    padding: 6px 0;
+    line-height: 2;
+  }
+
+  h2 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 48px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  h2 .points {
+    font-weight: 400;
+    color: var(--accent);
+    font-size: 0.85em;
+  }
+
+  h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 32px 0 14px;
+    color: var(--blue);
+  }
+
+  p { margin-bottom: 16px; }
+
+  .diagram-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin: 32px 0;
+  }
+
+  @media (max-width: 700px) {
+    .diagram-grid { grid-template-columns: 1fr; }
+  }
+
+  .diagram-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+
+  .diagram-card.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .diagram-card h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  svg text {
+    font-family: 'Crimson Pro', Georgia, serif;
+  }
+
+  .step-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .step-box::before {
+    content: attr(data-step);
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 12px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .step-box.blue::before { background: var(--blue); }
+  .step-box.green::before { background: var(--green); }
+
+  .chain {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    padding: 14px 0;
+    line-height: 2.2;
+  }
+
+  .chain .arrow {
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  .chain .var-up {
+    background: var(--green-light);
+    padding: 2px 10px;
+    border-radius: 4px;
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  .chain .var-down {
+    background: #fde2e2;
+    padding: 2px 10px;
+    border-radius: 4px;
+    color: #a33;
+    font-weight: 500;
+  }
+
+  .chain .var-zero {
+    background: var(--blue-light);
+    padding: 2px 10px;
+    border-radius: 4px;
+    color: var(--blue);
+    font-weight: 500;
+  }
+
+  .chain .var-ambig {
+    background: #fff3cd;
+    padding: 2px 10px;
+    border-radius: 4px;
+    color: #856404;
+    font-weight: 500;
+  }
+
+  table.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+  }
+
+  table.result-table th {
+    background: var(--accent);
+    color: white;
+    padding: 12px 20px;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  table.result-table td {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  table.result-table tr:nth-child(even) td {
+    background: #fafafa;
+  }
+
+  table.result-table .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+
+  table.result-table .val.pos { color: var(--green); }
+  table.result-table .val.zero { color: var(--blue); }
+
+  .explanation {
+    background: linear-gradient(135deg, #f7f3ee 0%, #f0ebe3 100%);
+    border-left: 4px solid var(--blue);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.97rem;
+  }
+
+  .explanation strong {
+    color: var(--blue);
+  }
+
+  .key-insight {
+    background: linear-gradient(135deg, #fdf0ec 0%, #fce8e0 100%);
+    border-left: 4px solid var(--accent);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .key-insight strong {
+    color: var(--accent);
+  }
+
+  .section-divider {
+    text-align: center;
+    margin: 48px 0;
+    color: var(--border);
+    font-size: 1.5rem;
+    letter-spacing: 12px;
+  }
+
+  .toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 32px;
+    margin: 32px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .toc h3 {
+    margin-top: 0;
+    color: var(--text);
+  }
+
+  .toc a {
+    color: var(--blue);
+    text-decoration: none;
+    display: block;
+    padding: 4px 0;
+    transition: color 0.2s;
+  }
+
+  .toc a:hover {
+    color: var(--accent);
+  }
+
+  .math {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88em;
+    background: #f5f0ea;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Aufgabe 1 – IS-LM Offene Volkswirtschaft</h1>
+  <div class="subtitle">Klausur Makroökonomik II, Februar 2024 · 31 Punkte · Flexible Wechselkurse</div>
+</header>
+
+<div class="toc">
+  <h3>Inhaltsübersicht</h3>
+  <a href="#modell">Modellrahmen & Annahmen</a>
+  <a href="#teil-a">Teil a) Ausgangsgleichgewicht – Punkt A (14 Punkte)</a>
+  <a href="#teil-bi">Teil b.i) Y* steigt – Graphische Analyse – Punkt B (10 Punkte)</a>
+  <a href="#teil-bii">Teil b.ii) Veränderungstabelle (7 Punkte)</a>
+  <a href="#wirkungskette">Wirkungskette & ökonomische Begründung</a>
+</div>
+
+<!-- ======================== MODELLRAHMEN ======================== -->
+<div id="modell" class="model-box">
+  <h3>Modellrahmen</h3>
+  <div class="equation">
+    IS-Kurve: &nbsp; Y = C(Y − T) + I(Y, i) + G + NX(Y, Y*, <sup>1+i</sup>⁄<sub>1+i*</sub> · Ē<sup>e</sup>)<br>
+    LM-Kurve: &nbsp; i = i₀ &nbsp; (horizontale LM → Zinssteuerung)
+  </div>
+</div>
+
+<div class="explanation">
+  <strong>Annahmen im Überblick:</strong> Kleine offene Volkswirtschaft, flexible Wechselkurse, kurzfristiges Gleichgewicht. Das Preisniveau ist auf 1 normiert (P = P* = 1), sodass der nominale gleich dem realen Wechselkurs ist (E = ε). Die Handelsbilanz ist anfangs ausgeglichen (NX = 0). Es gilt ∂NX/∂i < 0 – ein höherer inländischer Zinssatz führt über die Zinsparität zu einer Aufwertung (E↑), was die Nettoexporte senkt (Marshall-Lerner-Bedingung vorausgesetzt).
+</div>
+
+<!-- ======================== TEIL A ======================== -->
+<h2 id="teil-a">Teil a) Ausgangsgleichgewicht – Punkt A <span class="points">(14 Punkte)</span></h2>
+
+<p>Das Ausgangsgleichgewicht wird in vier Diagrammen dargestellt. Die Volkswirtschaft befindet sich bei ausgeglichener Handelsbilanz (NX = 0) im Punkt <strong>A</strong>.</p>
+
+<div class="diagram-grid">
+
+  <!-- IS-LM Diagramm -->
+  <div class="diagram-card">
+    <h4>1. IS-LM-Diagramm</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axes -->
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="250" x2="60" y2="30" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <defs>
+        <marker id="arrowA" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1a1a1a"/></marker>
+      </defs>
+      <!-- Axis labels -->
+      <text x="340" y="272" font-size="16" font-weight="600" fill="#1a1a1a">Y</text>
+      <text x="38" y="40" font-size="16" font-style="italic" font-weight="600" fill="#1a1a1a">i</text>
+
+      <!-- LM curve (horizontal) -->
+      <line x1="70" y1="150" x2="330" y2="150" stroke="#2a5a8c" stroke-width="2.5"/>
+      <text x="320" y="140" font-size="14" font-weight="600" fill="#2a5a8c">LM</text>
+
+      <!-- IS curve (downward sloping) -->
+      <line x1="90" y1="70" x2="310" y2="230" stroke="#b44a2f" stroke-width="2.5"/>
+      <text x="300" y="224" font-size="14" font-weight="600" fill="#b44a2f">IS₀</text>
+
+      <!-- Equilibrium A -->
+      <circle cx="195" cy="150" r="5" fill="#1a1a1a"/>
+      <text x="202" y="143" font-size="15" font-weight="700" fill="#1a1a1a">A</text>
+
+      <!-- Dashed lines -->
+      <line x1="195" y1="150" x2="195" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="60" y1="150" x2="195" y2="150" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <!-- Labels on axes -->
+      <text x="185" y="268" font-size="13" fill="#555">Y<tspan font-size="9" dy="3">A</tspan></text>
+      <text x="30" y="154" font-size="13" fill="#555">i₀</text>
+    </svg>
+  </div>
+
+  <!-- Zinsparitätendiagramm -->
+  <div class="diagram-card">
+    <h4>2. Zinsparitätendiagramm</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="250" x2="60" y2="30" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <text x="340" y="272" font-size="16" font-weight="600" fill="#1a1a1a">E</text>
+      <text x="38" y="40" font-size="16" font-style="italic" font-weight="600" fill="#1a1a1a">i</text>
+
+      <!-- ZP line (upward sloping in i-E space) -->
+      <line x1="100" y1="230" x2="320" y2="70" stroke="#2d6a4f" stroke-width="2.5"/>
+      <text x="310" y="62" font-size="14" font-weight="600" fill="#2d6a4f">ZP</text>
+
+      <!-- Equilibrium A -->
+      <circle cx="200" cy="158" r="5" fill="#1a1a1a"/>
+      <text x="207" y="151" font-size="15" font-weight="700" fill="#1a1a1a">A</text>
+
+      <!-- Dashed lines -->
+      <line x1="200" y1="158" x2="200" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="60" y1="158" x2="200" y2="158" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <text x="188" y="268" font-size="13" fill="#555">E<tspan font-size="9" dy="3">A</tspan></text>
+      <text x="30" y="162" font-size="13" fill="#555">i₀</text>
+    </svg>
+  </div>
+
+  <!-- Gütermarktdiagramm -->
+  <div class="diagram-card">
+    <h4>3. Gütermarktdiagramm</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="250" x2="60" y2="30" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <text x="325" y="272" font-size="16" font-weight="600" fill="#1a1a1a">Y</text>
+      <text x="18" y="40" font-size="13" font-weight="600" fill="#1a1a1a">Nachfrage</text>
+
+      <!-- 45° line -->
+      <line x1="60" y1="250" x2="290" y2="30" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="282" y="28" font-size="12" fill="#999">45°</text>
+
+      <!-- ZZ curve (flatter than 45°) -->
+      <line x1="80" y1="225" x2="310" y2="75" stroke="#b44a2f" stroke-width="2.5"/>
+      <text x="305" y="68" font-size="14" font-weight="600" fill="#b44a2f">ZZ₀</text>
+
+      <!-- Equilibrium A -->
+      <circle cx="195" cy="147" r="5" fill="#1a1a1a"/>
+      <text x="202" y="140" font-size="15" font-weight="700" fill="#1a1a1a">A</text>
+
+      <!-- Dashed lines -->
+      <line x1="195" y1="147" x2="195" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <text x="185" y="268" font-size="13" fill="#555">Y<tspan font-size="9" dy="3">A</tspan></text>
+    </svg>
+  </div>
+
+  <!-- Nettoexportdiagramm -->
+  <div class="diagram-card">
+    <h4>4. Nettoexportdiagramm</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="30" x2="60" y2="270" stroke="#1a1a1a" stroke-width="2"/>
+      <line x1="60" y1="30" x2="60" y2="20" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <!-- Negative axis arrow -->
+      <text x="340" y="272" font-size="16" font-weight="600" fill="#1a1a1a">Y</text>
+      <text x="30" y="32" font-size="15" font-style="italic" font-weight="600" fill="#1a1a1a">NX</text>
+
+      <!-- Zero line (NX=0 at middle height) -->
+      <line x1="60" y1="150" x2="340" y2="150" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="34" y="154" font-size="12" fill="#999">0</text>
+
+      <!-- NX curve (downward sloping, crosses zero at Y_A) -->
+      <line x1="90" y1="80" x2="310" y2="220" stroke="#2d6a4f" stroke-width="2.5"/>
+      <text x="300" y="214" font-size="14" font-weight="600" fill="#2d6a4f">NX₀</text>
+
+      <!-- Equilibrium A (on the zero line) -->
+      <circle cx="195" cy="150" r="5" fill="#1a1a1a"/>
+      <text x="202" y="143" font-size="15" font-weight="700" fill="#1a1a1a">A</text>
+
+      <!-- Dashed line down -->
+      <line x1="195" y1="150" x2="195" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <text x="185" y="268" font-size="13" fill="#555">Y<tspan font-size="9" dy="3">A</tspan></text>
+    </svg>
+  </div>
+</div>
+
+<div class="explanation">
+  <strong>Warum sehen die Diagramme so aus?</strong><br><br>
+  <strong>IS-LM:</strong> Die IS-Kurve fällt (höherer Zinssatz → weniger Investitionen + Aufwertung → weniger NX → weniger Nachfrage → weniger Y). Die LM-Kurve ist horizontal bei i₀, weil die Zentralbank Zinssteuerung betreibt.<br><br>
+  <strong>Zinsparität:</strong> Die ZP-Linie steigt an: Ein höherer inländischer Zins i macht inländische Anlagen attraktiver → Kapitalzufluss → Nachfrage nach inländischer Währung steigt → Aufwertung (E↑). Formal: E = (1+i)/(1+i*) · Ē<sup>e</sup>.<br><br>
+  <strong>Gütermarkt:</strong> Die ZZ-Nachfragekurve liegt unterhalb der 45°-Linie und schneidet sie im Gleichgewicht. Sie ist flacher als 45°, weil der Multiplikator (C' + I_Y − |NX_Y|) kleiner als 1 ist.<br><br>
+  <strong>Nettoexporte:</strong> NX fällt mit steigendem Y (höheres Einkommen → mehr Importe). Bei ausgeglichener Handelsbilanz kreuzt die NX-Kurve die Nulllinie genau bei Y_A.
+</div>
+
+<!-- ======================== TEIL B.i ======================== -->
+<div class="section-divider">· · ·</div>
+
+<h2 id="teil-bi">Teil b.i) Y* steigt exogen – Punkt B <span class="points">(10 Punkte)</span></h2>
+
+<p>Das ausländische Einkommen Y* steigt einmalig exogen, während i* und Ē<sup>e</sup> konstant bleiben. Was passiert?</p>
+
+<div class="step-box" data-step="SCHRITT 1 – Direkter Effekt">
+  <h3>Y* steigt → Ausländer kaufen mehr von unseren Gütern</h3>
+  <p>Wenn das ausländische Einkommen steigt, steigt die ausländische Nachfrage nach unseren Exportgütern. Das erhöht die Nettoexporte direkt:</p>
+  <div class="chain">
+    <span class="var-up">Y*↑</span>
+    <span class="arrow">⟹</span>
+    <span>Exporte steigen</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">NX↑</span>
+    <span class="arrow">⟹</span>
+    <span>Gesamtnachfrage steigt</span>
+  </div>
+  <p>Dieser Anstieg der Nettoexporte ist ein <strong>exogener positiver Nachfrageschock</strong> auf den inländischen Gütermarkt.</p>
+</div>
+
+<div class="step-box blue" data-step="SCHRITT 2 – IS-Kurve verschiebt sich">
+  <h3>IS-Kurve verschiebt sich nach rechts</h3>
+  <p>Die höhere Nachfrage durch gestiegene Exporte verschiebt die IS-Kurve nach rechts (von IS₀ zu IS₁). Bei jedem gegebenen Zinssatz ist die Gütermarktnachfrage nun höher.</p>
+  <div class="chain">
+    <span class="var-up">NX↑</span>
+    <span class="arrow">⟹</span>
+    <span>IS verschiebt sich rechts</span>
+    <span class="arrow">⟹</span>
+    <span>Neues Gleichgewicht bei höherem Y</span>
+  </div>
+</div>
+
+<div class="step-box green" data-step="SCHRITT 3 – Neues Gleichgewicht">
+  <h3>Der Zinssatz bleibt konstant → E bleibt konstant!</h3>
+  <p>Da die LM-Kurve horizontal ist (Zinssteuerung), ändert sich der Zinssatz <strong>nicht</strong>. Das ist der entscheidende Punkt!</p>
+  <p>Wenn i unverändert bleibt und auch i* und Ē<sup>e</sup> konstant sind, dann bleibt laut Zinsparitätsbedingung auch der Wechselkurs E unverändert:</p>
+  <div class="chain">
+    <span class="var-zero">Δi = 0</span>
+    <span class="arrow">⟹</span>
+    <span>E = <sup>(1+i₀)</sup>⁄<sub>(1+i*)</sub> · Ē<sup>e</sup></span>
+    <span class="arrow">⟹</span>
+    <span class="var-zero">ΔE = 0</span>
+  </div>
+</div>
+
+<div class="key-insight">
+  <strong>Kernerkenntnis:</strong> Bei flexiblen Wechselkursen und horizontaler LM-Kurve (Zinssteuerung) wird der Wechselkurs allein durch die Zinsparität bestimmt. Da sich i nicht ändert, ändert sich auch E nicht. Es gibt keinen Wechselkurskanal – der gesamte Anpassungsmechanismus läuft über den Multiplikator.
+</div>
+
+<!-- Diagrams for Part B -->
+<div class="diagram-grid">
+
+  <!-- IS-LM with shift -->
+  <div class="diagram-card">
+    <h4>1. IS-LM-Diagramm (mit Verschiebung)</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="250" x2="60" y2="30" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <text x="340" y="272" font-size="16" font-weight="600" fill="#1a1a1a">Y</text>
+      <text x="38" y="40" font-size="16" font-style="italic" font-weight="600" fill="#1a1a1a">i</text>
+
+      <!-- LM -->
+      <line x1="70" y1="150" x2="330" y2="150" stroke="#2a5a8c" stroke-width="2.5"/>
+      <text x="320" y="140" font-size="14" font-weight="600" fill="#2a5a8c">LM</text>
+
+      <!-- IS₀ (old) -->
+      <line x1="90" y1="70" x2="250" y2="230" stroke="#b44a2f" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.5"/>
+      <text x="240" y="238" font-size="13" fill="#b44a2f" opacity="0.6">IS₀</text>
+
+      <!-- IS₁ (new, shifted right) -->
+      <line x1="150" y1="70" x2="310" y2="230" stroke="#b44a2f" stroke-width="2.5"/>
+      <text x="300" y="224" font-size="14" font-weight="600" fill="#b44a2f">IS₁</text>
+
+      <!-- Shift arrow -->
+      <line x1="160" y1="180" x2="200" y2="180" stroke="#b44a2f" stroke-width="1.5" marker-end="url(#arrowShift)"/>
+      <defs><marker id="arrowShift" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#b44a2f"/></marker></defs>
+
+      <!-- Point A -->
+      <circle cx="170" cy="150" r="4" fill="#999"/>
+      <text x="163" y="170" font-size="14" font-weight="600" fill="#999">A</text>
+
+      <!-- Point B -->
+      <circle cx="230" cy="150" r="5" fill="#1a1a1a"/>
+      <text x="237" y="143" font-size="15" font-weight="700" fill="#1a1a1a">B</text>
+
+      <!-- Dashed lines -->
+      <line x1="170" y1="150" x2="170" y2="250" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="230" y1="150" x2="230" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="60" y1="150" x2="170" y2="150" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <text x="159" y="268" font-size="12" fill="#999">Y<tspan font-size="8" dy="3">A</tspan></text>
+      <text x="220" y="268" font-size="13" fill="#555">Y<tspan font-size="9" dy="3">B</tspan></text>
+      <text x="30" y="154" font-size="13" fill="#555">i₀</text>
+
+      <!-- Movement arrow along LM -->
+      <line x1="178" y1="146" x2="222" y2="146" stroke="#2d6a4f" stroke-width="2" marker-end="url(#arrowGr)"/>
+      <defs><marker id="arrowGr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#2d6a4f"/></marker></defs>
+    </svg>
+  </div>
+
+  <!-- ZP Diagramm -->
+  <div class="diagram-card">
+    <h4>2. Zinsparitätendiagramm (keine Änderung)</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="250" x2="60" y2="30" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <text x="340" y="272" font-size="16" font-weight="600" fill="#1a1a1a">E</text>
+      <text x="38" y="40" font-size="16" font-style="italic" font-weight="600" fill="#1a1a1a">i</text>
+
+      <!-- ZP line -->
+      <line x1="100" y1="230" x2="320" y2="70" stroke="#2d6a4f" stroke-width="2.5"/>
+      <text x="310" y="62" font-size="14" font-weight="600" fill="#2d6a4f">ZP</text>
+
+      <!-- Point A = B (same position!) -->
+      <circle cx="200" cy="158" r="6" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="200" cy="158" r="3" fill="#1a1a1a"/>
+      <text x="210" y="150" font-size="15" font-weight="700" fill="#1a1a1a">A = B</text>
+
+      <!-- Dashed lines -->
+      <line x1="200" y1="158" x2="200" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="60" y1="158" x2="200" y2="158" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <text x="185" y="268" font-size="13" fill="#555">E<tspan font-size="9" dy="3">A</tspan>=E<tspan font-size="9" dy="3">B</tspan></text>
+      <text x="30" y="162" font-size="13" fill="#555">i₀</text>
+
+      <!-- Info text -->
+      <text x="120" y="210" font-size="11" fill="#999" font-style="italic">Keine Verschiebung!</text>
+      <text x="120" y="226" font-size="11" fill="#999" font-style="italic">i*, Ē<tspan font-size="8" dy="-3">e</tspan><tspan dy="3"> und i konstant</tspan></text>
+    </svg>
+  </div>
+
+  <!-- Gütermarkt with shift -->
+  <div class="diagram-card">
+    <h4>3. Gütermarktdiagramm (mit Verschiebung)</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="250" x2="60" y2="30" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <text x="325" y="272" font-size="16" font-weight="600" fill="#1a1a1a">Y</text>
+      <text x="18" y="40" font-size="13" font-weight="600" fill="#1a1a1a">Nachfrage</text>
+
+      <!-- 45° line -->
+      <line x1="60" y1="250" x2="290" y2="30" stroke="#999" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="282" y="28" font-size="12" fill="#999">45°</text>
+
+      <!-- ZZ₀ old -->
+      <line x1="80" y1="225" x2="280" y2="88" stroke="#b44a2f" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+      <text x="270" y="82" font-size="13" fill="#b44a2f" opacity="0.5">ZZ₀</text>
+
+      <!-- ZZ₁ new (shifted up) -->
+      <line x1="80" y1="200" x2="300" y2="53" stroke="#b44a2f" stroke-width="2.5"/>
+      <text x="295" y="46" font-size="14" font-weight="600" fill="#b44a2f">ZZ₁</text>
+
+      <!-- Shift arrow -->
+      <line x1="140" y1="177" x2="140" y2="152" stroke="#b44a2f" stroke-width="1.5" marker-end="url(#arrowShift)"/>
+
+      <!-- Point A -->
+      <circle cx="180" cy="155" r="4" fill="#999"/>
+      <text x="167" y="170" font-size="14" font-weight="600" fill="#999">A</text>
+
+      <!-- Point B (on 45° line, higher Y) -->
+      <circle cx="220" cy="124" r="5" fill="#1a1a1a"/>
+      <text x="227" y="118" font-size="15" font-weight="700" fill="#1a1a1a">B</text>
+
+      <!-- Dashed lines -->
+      <line x1="180" y1="155" x2="180" y2="250" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="220" y1="124" x2="220" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <text x="170" y="268" font-size="12" fill="#999">Y<tspan font-size="8" dy="3">A</tspan></text>
+      <text x="212" y="268" font-size="13" fill="#555">Y<tspan font-size="9" dy="3">B</tspan></text>
+    </svg>
+  </div>
+
+  <!-- NX Diagramm with shift -->
+  <div class="diagram-card">
+    <h4>4. Nettoexportdiagramm (mit Verschiebung)</h4>
+    <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="250" x2="350" y2="250" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <line x1="60" y1="30" x2="60" y2="270" stroke="#1a1a1a" stroke-width="2"/>
+      <line x1="60" y1="30" x2="60" y2="20" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrowA)"/>
+      <text x="340" y="272" font-size="16" font-weight="600" fill="#1a1a1a">Y</text>
+      <text x="30" y="32" font-size="15" font-style="italic" font-weight="600" fill="#1a1a1a">NX</text>
+
+      <!-- Zero line -->
+      <line x1="60" y1="155" x2="340" y2="155" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="34" y="159" font-size="12" fill="#999">0</text>
+
+      <!-- NX₀ old (crosses zero at Y_A) -->
+      <line x1="90" y1="80" x2="310" y2="228" stroke="#2d6a4f" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.4"/>
+      <text x="298" y="222" font-size="13" fill="#2d6a4f" opacity="0.5">NX₀</text>
+
+      <!-- NX₁ new (shifted up – crosses zero at higher Y) -->
+      <line x1="90" y1="55" x2="310" y2="203" stroke="#2d6a4f" stroke-width="2.5"/>
+      <text x="300" y="197" font-size="14" font-weight="600" fill="#2d6a4f">NX₁</text>
+
+      <!-- Shift arrow -->
+      <line x1="120" y1="100" x2="120" y2="78" stroke="#2d6a4f" stroke-width="1.5" marker-end="url(#arrowGr)"/>
+
+      <!-- Point A (on NX₀ at Y_A, NX=0) -->
+      <circle cx="190" cy="155" r="4" fill="#999"/>
+      <text x="175" y="175" font-size="14" font-weight="600" fill="#999">A</text>
+
+      <!-- Point B (on NX₁ at Y_B, NX>0) -->
+      <circle cx="230" cy="130" r="5" fill="#1a1a1a"/>
+      <text x="237" y="125" font-size="15" font-weight="700" fill="#1a1a1a">B</text>
+
+      <!-- Dashed lines -->
+      <line x1="190" y1="155" x2="190" y2="250" stroke="#ccc" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="230" y1="130" x2="230" y2="250" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+      <line x1="60" y1="130" x2="230" y2="130" stroke="#999" stroke-width="1" stroke-dasharray="5,4"/>
+
+      <text x="179" y="268" font-size="12" fill="#999">Y<tspan font-size="8" dy="3">A</tspan></text>
+      <text x="222" y="268" font-size="13" fill="#555">Y<tspan font-size="9" dy="3">B</tspan></text>
+      <text x="25" y="134" font-size="12" fill="#2d6a4f">NX<tspan font-size="8" dy="3">B</tspan><tspan dy="-3">>0</tspan></text>
+
+      <!-- Positive area shading hint -->
+      <rect x="60" y="130" width="170" height="25" fill="#2d6a4f" opacity="0.05"/>
+    </svg>
+  </div>
+</div>
+
+<div class="explanation">
+  <strong>Zusammenfassung der graphischen Verschiebungen:</strong><br><br>
+  <strong>IS-LM:</strong> IS verschiebt sich nach rechts (NX↑ → mehr Nachfrage). LM bleibt. Neues Gleichgewicht B liegt rechts von A bei gleichem i₀, aber höherem Y.<br><br>
+  <strong>Zinsparität:</strong> Keine Veränderung! Die ZP-Linie verschiebt sich nicht (i* und Ē<sup>e</sup> konstant), und der Gleichgewichtspunkt bewegt sich nicht (i unverändert). A = B.<br><br>
+  <strong>Gütermarkt:</strong> ZZ verschiebt sich nach oben (höhere Exporte = höhere Gesamtnachfrage bei jedem Y). Neuer Schnittpunkt mit 45°-Linie bei Y_B > Y_A.<br><br>
+  <strong>Nettoexporte:</strong> NX-Kurve verschiebt sich nach oben (Y*↑ steigert Exporte bei jedem Y-Niveau). Punkt B liegt oberhalb der Nulllinie: NX_B > 0 (Handelsüberschuss).
+</div>
+
+<!-- ======================== TEIL B.ii ======================== -->
+<div class="section-divider">· · ·</div>
+
+<h2 id="teil-bii">Teil b.ii) Veränderungstabelle <span class="points">(7 Punkte)</span></h2>
+
+<table class="result-table">
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Veränderung</th>
+      <th>Begründung</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Y</strong></td>
+      <td class="val pos">positiv ↑</td>
+      <td>IS verschiebt sich rechts → Y steigt (Multiplikator-Effekt)</td>
+    </tr>
+    <tr>
+      <td><strong>C</strong></td>
+      <td class="val pos">positiv ↑</td>
+      <td>Y↑ → Y<sub>V</sub> = Y−T steigt → C(Y−T) steigt</td>
+    </tr>
+    <tr>
+      <td><strong>Y<sub>V</sub></strong></td>
+      <td class="val pos">positiv ↑</td>
+      <td>Y↑ bei konstantem T → verfügbares Einkommen steigt</td>
+    </tr>
+    <tr>
+      <td><strong>E</strong></td>
+      <td class="val zero">null (0)</td>
+      <td>i, i*, Ē<sup>e</sup> alle unverändert → ZP-Bedingung: E konstant</td>
+    </tr>
+    <tr>
+      <td><strong>NX</strong></td>
+      <td class="val pos">positiv ↑</td>
+      <td>Y*↑ steigert Exporte stärker als Y↑ die Importe erhöht (s. Beweis unten)</td>
+    </tr>
+    <tr>
+      <td><strong>i</strong></td>
+      <td class="val zero">null (0)</td>
+      <td>Horizontale LM bei i₀ → Zinssatz durch Zentralbank fixiert</td>
+    </tr>
+    <tr>
+      <td><strong>M<sup>D</sup></strong></td>
+      <td class="val pos">positiv ↑</td>
+      <td>M<sup>D</sup>(Y,i): Y↑ bei konstantem i → Geldnachfrage steigt</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ======================== NX BEWEIS ======================== -->
+<h3>Warum ist NX positiv? – Formaler Beweis</h3>
+
+<div class="step-box green" data-step="BEWEIS">
+  <p>Im Gleichgewicht gilt die IS-Gleichung. Wir differenzieren total nach Y*:</p>
+  <div class="equation" style="font-size: 0.88rem; padding: 10px 0;">
+    dY = C'·dY + I<sub>Y</sub>·dY + NX<sub>Y</sub>·dY + NX<sub>Y*</sub>·dY*<br><br>
+    dY·(1 − C' − I<sub>Y</sub> − NX<sub>Y</sub>) = NX<sub>Y*</sub>·dY*<br><br>
+    dY = NX<sub>Y*</sub>·dY* / (1 − C' − I<sub>Y</sub> − NX<sub>Y</sub>)
+  </div>
+  <p>Jetzt berechnen wir die Gesamtänderung der Nettoexporte:</p>
+  <div class="equation" style="font-size: 0.88rem; padding: 10px 0;">
+    dNX = NX<sub>Y</sub>·dY + NX<sub>Y*</sub>·dY*<br><br>
+    = NX<sub>Y*</sub>·dY* · [ NX<sub>Y</sub> / (1 − C' − I<sub>Y</sub> − NX<sub>Y</sub>) + 1 ]<br><br>
+    = NX<sub>Y*</sub>·dY* · <strong>(1 − C' − I<sub>Y</sub>)</strong> / (1 − C' − I<sub>Y</sub> − NX<sub>Y</sub>)
+  </div>
+  <p>Da:</p>
+  <div class="chain">
+    <span>NX<sub>Y*</sub> > 0</span>
+    <span>,</span>
+    <span>dY* > 0</span>
+    <span>,</span>
+    <span>1 − C' − I<sub>Y</sub> > 0</span>
+    <span>(Stabilität)</span>
+    <span>,</span>
+    <span>Nenner > 0</span>
+  </div>
+  <p>folgt: <strong>dNX > 0</strong>. Die Nettoexporte steigen – der Effekt des gestiegenen Y* überwiegt den importsteigernden Effekt des höheren Y.</p>
+</div>
+
+<div class="key-insight">
+  <strong>Intuition:</strong> Der Multiplikator „leckt" über Sparen, Steuern und Importe. Deshalb kann Y nicht so stark steigen, dass der gesamte NX-Anstieg durch höhere Importe aufgefressen wird. Es bleibt ein Handelsüberschuss (NX > 0) im neuen Gleichgewicht.
+</div>
+
+<!-- ======================== WIRKUNGSKETTE ======================== -->
+<div class="section-divider">· · ·</div>
+
+<h2 id="wirkungskette">Vollständige Wirkungskette</h2>
+
+<p>Hier die gesamte ökonomische Kausalkette vom Schock bis zum neuen Gleichgewicht:</p>
+
+<div class="step-box" data-step="1 – AUSLÖSER">
+  <div class="chain">
+    <span class="var-up">Y*↑</span>
+    <span class="arrow">⟹</span>
+    <span>Ausland kauft mehr inländische Güter</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">Exporte↑</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">NX↑</span>
+  </div>
+</div>
+
+<div class="step-box blue" data-step="2 – GÜTERMARKT">
+  <div class="chain">
+    <span class="var-up">NX↑</span>
+    <span class="arrow">⟹</span>
+    <span>Gesamtnachfrage steigt</span>
+    <span class="arrow">⟹</span>
+    <span>IS verschiebt sich rechts / ZZ nach oben</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">Y↑</span>
+  </div>
+</div>
+
+<div class="step-box green" data-step="3 – MULTIPLIKATOR">
+  <div class="chain">
+    <span class="var-up">Y↑</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">Y<sub>V</sub>↑</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">C↑</span>
+    <span class="arrow">⟹</span>
+    <span>weitere Nachfragesteigerung</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">Y↑↑</span>
+  </div>
+  <p style="margin-top: 10px;">Gleichzeitig: Y↑ → I(Y,i₀)↑ (da ∂I/∂Y > 0 und i konstant). Auch die Investitionen verstärken den Multiplikator.</p>
+</div>
+
+<div class="step-box" data-step="4 – GEGENLÄUFIGER IMPORT-EFFEKT">
+  <div class="chain">
+    <span class="var-up">Y↑</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">Importe↑</span>
+    <span class="arrow">⟹</span>
+    <span class="var-down">NX-Dämpfung</span>
+  </div>
+  <p style="margin-top: 10px;">Dieser Effekt bremst den Multiplikator und reduziert den NX-Anstieg teilweise, aber nicht vollständig (→ NX bleibt positiv).</p>
+</div>
+
+<div class="step-box blue" data-step="5 – FINANZMARKT">
+  <div class="chain">
+    <span class="var-zero">Δi = 0</span>
+    <span>(Zinssteuerung)</span>
+    <span class="arrow">⟹</span>
+    <span class="var-zero">ΔE = 0</span>
+    <span>(Zinsparität)</span>
+  </div>
+  <p style="margin-top: 10px;">Die Zentralbank hält den Zinssatz bei i₀. Dadurch gibt es keine Veränderung auf dem internationalen Finanzmarkt und keinen Wechselkurskanal.</p>
+</div>
+
+<div class="step-box green" data-step="6 – GELDMARKT">
+  <div class="chain">
+    <span class="var-up">Y↑</span>
+    <span class="arrow">⟹</span>
+    <span class="var-up">M<sup>D</sup>(Y,i₀)↑</span>
+    <span class="arrow">⟹</span>
+    <span>Zentralbank stellt mehr Liquidität bereit</span>
+    <span>(um i₀ zu halten)</span>
+  </div>
+  <p style="margin-top: 10px;">Da die Zentralbank Zinssteuerung betreibt, passt sie die Geldmenge endogen an die gestiegene Geldnachfrage an, sodass i = i₀ gilt.</p>
+</div>
+
+<!-- ======================== ZUSAMMENFASSUNG ======================== -->
+<div class="section-divider">· · ·</div>
+
+<h2>Zusammenfassung: Neues Gleichgewicht B</h2>
+
+<div class="model-box" style="border-left-color: #2d6a4f;">
+  <h3 style="color: #2d6a4f;">Endergebnis</h3>
+  <div class="chain" style="font-size: 1rem;">
+    <span class="var-up">Y↑</span>
+    <span class="var-up">C↑</span>
+    <span class="var-up">Y<sub>V</sub>↑</span>
+    <span class="var-zero">E = 0</span>
+    <span class="var-up">NX↑</span>
+    <span class="var-zero">i = 0</span>
+    <span class="var-up">M<sup>D</sup>↑</span>
+  </div>
+  <p style="margin-top: 16px; font-size: 0.95rem;">
+    Der Anstieg des ausländischen Einkommens Y* wirkt wie ein positiver Nachfrageschock, der über den Multiplikator die inländische Produktion erhöht. Da der Zinssatz durch die Zentralbank fixiert ist, bleibt der Wechselkurs unverändert – der gesamte Anpassungsmechanismus läuft ausschließlich über den Gütermarkt-Multiplikator.
+  </p>
+</div>
+
+<div class="key-insight" style="margin-top: 32px;">
+  <strong>Klausurtipp:</strong> Diese Aufgabe ist nahezu identisch mit Übung 4, Aufgabe 4.1. Der entscheidende Unterschied zur Klausur ist, dass hier zusätzlich das Gütermarktdiagramm und das NX-Diagramm verlangt werden. Achte besonders darauf, dass im Zinsparitätendiagramm keine Verschiebung stattfindet – das wird häufig falsch gemacht! Außerdem: Immer die Punkte A und B klar beschriften und gestrichelte Linien zu den Achsen ziehen.
+</div>
+
+</div>
+</body>
+</html>
