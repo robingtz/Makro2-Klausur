@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makro Formeln – Variablenübersicht</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #181b24;
+      --surface2: #1e2230;
+      --border: #2a2e3d;
+      --text: #e8e6e3;
+      --text-dim: #9b9aa0;
+      --accent: #f0a050;
+      --accent2: #50b0f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    .page-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 60px 0 50px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 50px;
+    }
+    .header-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 42px;
+      font-weight: 300;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .header .subtitle, .header .back-link {
+      color: var(--text-dim);
+      font-size: 15px;
+    }
+    .header .back-link {
+      display: inline-block;
+      margin-top: 16px;
+      color: var(--accent2);
+      text-decoration: none;
+    }
+    .header .back-link:hover {
+      color: var(--accent);
+    }
+
+    blockquote.cite {
+      border-left: 3px solid var(--border);
+      padding-left: 20px;
+      margin: 24px 0 32px;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    .section {
+      margin-bottom: 48px;
+    }
+    .section h2 {
+      font-family: 'Crimson Pro', serif;
+      font-size: 26px;
+      font-weight: 400;
+      margin-bottom: 16px;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .section h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 24px 0 12px;
+      color: var(--text);
+    }
+    .section p {
+      margin-bottom: 12px;
+    }
+
+    .formeln-table-wrap {
+      overflow-x: auto;
+      margin: 16px 0 24px;
+    }
+    .formeln-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .formeln-table th,
+    .formeln-table td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .formeln-table th {
+      background: var(--surface);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .formeln-table td {
+      background: var(--surface2);
+    }
+    .formeln-table tr:hover td {
+      background: var(--surface);
+    }
+    .formeln-table .katex { font-size: 1em; }
+
+    .formula-block {
+      margin: 16px 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .formula-block .katex {
+      font-size: 1.1em;
+    }
+
+    .section hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 32px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="header">
+      <div class="header-tag">Formeln</div>
+      <h1>Variablenübersicht – Makroökonomik II (WiSe 25/26)</h1>
+      <p class="subtitle">Prof. Dr. Holger Strulik, Georg-August-Universität Göttingen</p>
+      <p class="subtitle">Basierend auf: Vorlesungsfolien WiSe 25/26 &amp; Handout V25.3 (Kis-Katos)</p>
+      <a class="back-link" href="index.html">← Zurück zur Übersicht</a>
+    </header>
+
+    <main>
+      <section class="section">
+        <h2>1. Offene Güter- und Finanzmärkte (Kap. 17)</h2>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th><th>Bemerkung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">E</span></td><td>Nominaler Wechselkurs (Mengennotierung)</td><td><span class="math-inline">E = \frac{\text{ausl. Währung}}{\text{inl. Währung}}</span>, z. B. <span class="math-inline">E = 1{,}13 \;\$/€</span></td></tr>
+              <tr><td><span class="math-inline">\varepsilon</span></td><td>Realer Wechselkurs</td><td><span class="math-inline">\varepsilon = \frac{E \cdot P}{P^*}</span></td></tr>
+              <tr><td><span class="math-inline">P</span></td><td>Inländisches Preisniveau</td><td></td></tr>
+              <tr><td><span class="math-inline">P^*</span></td><td>Ausländisches Preisniveau</td><td></td></tr>
+              <tr><td><span class="math-inline">i_t</span></td><td>Inländischer Nominalzins in Periode <span class="math-inline">t</span></td><td></td></tr>
+              <tr><td><span class="math-inline">i_t^*</span></td><td>Ausländischer Nominalzins in Periode <span class="math-inline">t</span></td><td></td></tr>
+              <tr><td><span class="math-inline">E_t</span></td><td>Nominaler Wechselkurs in Periode <span class="math-inline">t</span></td><td></td></tr>
+              <tr><td><span class="math-inline">E_{t+1}^e</span></td><td>Erwarteter Wechselkurs in <span class="math-inline">t+1</span></td><td></td></tr>
+              <tr><td><span class="math-inline">\bar{E}^e</span></td><td>Konstant erwarteter Wechselkurs</td><td>Vereinfachende Annahme</td></tr>
+              <tr><td><span class="math-inline">E_{t+1}^T</span></td><td>Terminkurs der ausl. Währung zum Zeitpunkt <span class="math-inline">t+1</span></td><td>Gedeckte Zinsparität</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Zinsparitätenbeziehungen</h3>
+        <p><strong>Ungedeckte Zinsparität:</strong></p>
+        <div class="formula-block"><span class="math-display">1 + i_t = \frac{E_t}{E_{t+1}^e}(1 + i_t^*)</span></div>
+        <p><strong>Approximation:</strong></p>
+        <div class="formula-block"><span class="math-display">i_t \approx i_t^* - \frac{E_{t+1}^e - E_t}{E_t}</span></div>
+        <p><strong>Gedeckte Zinsparität:</strong></p>
+        <div class="formula-block"><span class="math-display">1 + i_t = \frac{E_t}{E_{t+1}^T}(1 + i_t^*)</span></div>
+        <p><strong>Wechselkurs als Funktion des Zinses (bei <span class="math-inline">E_{t+1}^e = \bar{E}^e</span>):</strong></p>
+        <div class="formula-block"><span class="math-display">E_t = \frac{1 + i_t}{1 + i_t^*} \bar{E}^e</span></div>
+        <p><strong>Kaufkraftparität (PPP):</strong></p>
+        <div class="formula-block"><span class="math-display">\varepsilon = 1 = \frac{E \cdot P}{P^*} \quad \Rightarrow \quad E = \frac{P^*}{P}</span></div>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>2. Der Gütermarkt einer offenen Volkswirtschaft (Kap. 18)</h2>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th><th>Bemerkung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">Y</span></td><td>Inländische Produktion / Output / BIP</td><td></td></tr>
+              <tr><td><span class="math-inline">Y^*</span></td><td>Ausländische Produktion</td><td></td></tr>
+              <tr><td><span class="math-inline">C</span></td><td>Konsum</td><td><span class="math-inline">C = C(Y_V)</span> mit <span class="math-inline">Y_V = Y - T</span></td></tr>
+              <tr><td><span class="math-inline">I</span></td><td>Investitionen</td><td><span class="math-inline">I = I(Y, r)</span> bzw. <span class="math-inline">I(Y, i)</span> in kurzer Frist</td></tr>
+              <tr><td><span class="math-inline">G</span></td><td>Staatsausgaben</td><td>Exogen</td></tr>
+              <tr><td><span class="math-inline">T</span></td><td>Steuern (netto, d. h. Steuern minus Transfers)</td><td></td></tr>
+              <tr><td><span class="math-inline">Y_V</span></td><td>Verfügbares Einkommen</td><td><span class="math-inline">Y_V = Y - T</span></td></tr>
+              <tr><td><span class="math-inline">r</span></td><td>Realzins</td><td><span class="math-inline">r = i - \pi^e</span>; kurze Frist: <span class="math-inline">r \approx i</span></td></tr>
+              <tr><td><span class="math-inline">X</span></td><td>Exporte</td><td><span class="math-inline">X = X(Y^*, \varepsilon)</span>: <span class="math-inline">Y^* \uparrow \Rightarrow X\uparrow</span>, <span class="math-inline">\varepsilon \uparrow \Rightarrow X\downarrow</span></td></tr>
+              <tr><td><span class="math-inline">IM</span></td><td>Importe</td><td><span class="math-inline">IM = IM(Y, \varepsilon)</span>: <span class="math-inline">Y\uparrow \Rightarrow IM\uparrow</span>, <span class="math-inline">\varepsilon\uparrow \Rightarrow IM\uparrow</span></td></tr>
+              <tr><td><span class="math-inline">NX</span></td><td>Nettoexporte (Handelsbilanz)</td><td><span class="math-inline">NX = X - \frac{IM}{\varepsilon}</span></td></tr>
+              <tr><td><span class="math-inline">Z</span></td><td>Gesamtnachfrage nach inl. Gütern</td><td><span class="math-inline">Z = C + I + G + X - \frac{IM}{\varepsilon}</span></td></tr>
+              <tr><td><span class="math-inline">DD</span></td><td>Inländische Nachfrage (nach in- und ausl. Gütern)</td><td><span class="math-inline">DD = C(Y-T) + I(Y,r) + G</span></td></tr>
+              <tr><td><span class="math-inline">AA</span></td><td>Inl. Nachfrage nach inl. Gütern</td><td><span class="math-inline">AA = DD - \frac{IM}{\varepsilon}</span></td></tr>
+              <tr><td><span class="math-inline">ZZ</span></td><td>Gesamtnachfrage nach inl. Gütern</td><td><span class="math-inline">ZZ = AA + X = DD - \frac{IM}{\varepsilon} + X</span></td></tr>
+              <tr><td><span class="math-inline">Y_{HB}</span></td><td>Einkommen bei ausgeglichener Handelsbilanz</td><td><span class="math-inline">NX(Y_{HB}) = 0</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Gütermarktgleichgewicht (offene VW)</h3>
+        <div class="formula-block"><span class="math-display">Y = C(Y - T) + I(Y, r) + G + X(Y^*, \varepsilon) - \frac{IM(Y, \varepsilon)}{\varepsilon}</span></div>
+        <h3>Marshall-Lerner-Bedingung</h3>
+        <p>Eine reale Abwertung (<span class="math-inline">\varepsilon \downarrow</span>) verbessert die Handelsbilanz, wenn:</p>
+        <div class="formula-block"><span class="math-display">\frac{\partial X}{\partial \varepsilon}\frac{\varepsilon}{X} + \frac{\partial IM}{\partial \varepsilon}\frac{\varepsilon}{IM} > 1</span></div>
+        <p>(Summe der Elastizitäten von Export und Import bzgl. <span class="math-inline">\varepsilon</span> übersteigt 1)</p>
+        <h3>Leistungsbilanz und Ersparnis</h3>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">S</span></td><td>Private Ersparnis</td></tr>
+              <tr><td><span class="math-inline">LB</span></td><td>Leistungsbilanz</td></tr>
+              <tr><td><span class="math-inline">SP</span></td><td>Saldo des Primäreinkommens</td></tr>
+              <tr><td><span class="math-inline">BNE</span></td><td>Bruttonationaleinkommen</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-block"><span class="math-display">LB = S + (T - G) - I</span></div>
+        <div class="formula-block"><span class="math-display">BNE = Y + SP</span></div>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>3. Produktion, Zinssatz und Wechselkurs – Mundell-Fleming-Modell (Kap. 19)</h2>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th><th>Bemerkung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">M</span></td><td>Nominale Geldmenge</td><td></td></tr>
+              <tr><td><span class="math-inline">L(i)</span></td><td>Geldnachfragefunktion</td><td><span class="math-inline">L'(i) &lt; 0</span></td></tr>
+              <tr><td><span class="math-inline">\bar{i}</span></td><td>Von der Zentralbank gesetzter Zinssatz</td><td></td></tr>
+              <tr><td><span class="math-inline">\bar{E}</span></td><td>Fester Wechselkurs</td><td>Bei festem WK-Regime</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>IS-Kurve (offene VW, kurze Frist, <span class="math-inline">P/P^* = 1</span>)</h3>
+        <div class="formula-block"><span class="math-display">Y = C(Y - T) + I(Y, i) + G + NX\!\left(Y,\; Y^*,\; \frac{1+i}{1+i^*}\bar{E}^e\right)</span></div>
+        <p>Zwei Transmissionskanäle eines Zinsanstiegs:</p>
+        <p>1. <strong>Zinskanal:</strong> <span class="math-inline">i\uparrow \Rightarrow I\downarrow \Rightarrow Y\downarrow</span></p>
+        <p>2. <strong>Wechselkurskanal:</strong> <span class="math-inline">i\uparrow \Rightarrow E\uparrow \Rightarrow NX\downarrow \Rightarrow Y\downarrow</span></p>
+        <h3>LM-Kurve</h3>
+        <div class="formula-block"><span class="math-display">i = \bar{i}</span></div>
+        <p>(Zentralbank setzt Zinssatz, Geldmenge passt sich an)</p>
+        <h3>Zinsparitätenkurve (ZP)</h3>
+        <div class="formula-block"><span class="math-display">E = \frac{1+i}{1+i^*}\bar{E}^e</span></div>
+        <h3>Geldmarkt bei festen Wechselkursen</h3>
+        <div class="formula-block"><span class="math-display">\frac{M}{P} = Y \cdot L(i^*)</span></div>
+        <p>Bei festen WK: <span class="math-inline">\bar{E} = E_t = E_{t+1}^e</span> und <span class="math-inline">i_t = i_t^*</span></p>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>4. Unterschiedliche Wechselkursregime (Kap. 20)</h2>
+        <h3>Aggregierte Nachfrage bei festen Wechselkursen</h3>
+        <div class="formula-block"><span class="math-display">Y = Y\!\left(\underset{-}{\frac{\bar{E}P}{P^*}},\; \underset{+}{G},\; \underset{-}{T},\; \underset{-}{i^* - \pi^e},\; \underset{+}{Y^*}\right)</span></div>
+        <h3>Phillipskurve (offene VW)</h3>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">\pi_t</span></td><td>Tatsächliche Inflationsrate</td></tr>
+              <tr><td><span class="math-inline">\pi_t^e</span></td><td>Erwartete Inflationsrate</td></tr>
+              <tr><td><span class="math-inline">\pi^*</span></td><td>Festverankertes Inflationsziel (Inland)</td></tr>
+              <tr><td><span class="math-inline">\pi_A</span></td><td>Inflation im Ausland</td></tr>
+              <tr><td><span class="math-inline">\pi_A^*</span></td><td>Festverankerte Inflationserwartung (Ausland)</td></tr>
+              <tr><td><span class="math-inline">Y_n</span></td><td>Natürliches Produktionsniveau</td></tr>
+              <tr><td><span class="math-inline">\alpha</span></td><td>Parameter der Phillipskurve</td></tr>
+              <tr><td><span class="math-inline">L</span></td><td>Arbeitskraft / Beschäftigung</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula-block"><span class="math-display">\pi_t - \pi_t^e = \frac{\alpha}{L}(Y_t - Y_n)</span></div>
+        <p>Bei fest verankerten Erwartungen: <span class="math-inline">\pi_t^e = \pi^*</span></p>
+        <h3>Wechselkurs bei endogenen Erwartungen</h3>
+        <div class="formula-block"><span class="math-display">E_t = \frac{1+i_t}{1+i_t^*} \cdot \frac{1+i_{t+1}^e}{1+i_{t+1}^{*e}} \cdot \ldots \cdot \frac{1+i_{t+n}^e}{1+i_{t+n}^{*e}} \cdot E_{t+n+1}^e</span></div>
+        <h3>Approximierte Zinsparität (Wechselkurskrisen)</h3>
+        <div class="formula-block"><span class="math-display">i_t \approx i_t^* - \frac{E_{t+1}^e - E_t}{E_t}</span></div>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>5. Politökonomische Aspekte der Geld- und Fiskalpolitik (Kap. 21)</h2>
+        <h3>Barro-Gordon-Modell</h3>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">\pi</span></td><td>Tatsächliche Inflation</td></tr>
+              <tr><td><span class="math-inline">\pi^e</span></td><td>Erwartete Inflation</td></tr>
+              <tr><td><span class="math-inline">u</span></td><td>Tatsächliche Arbeitslosenquote</td></tr>
+              <tr><td><span class="math-inline">u_n</span></td><td>Natürliche Arbeitslosenquote</td></tr>
+              <tr><td><span class="math-inline">L</span></td><td>Wohlfahrtsverlustfunktion</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Phillipskurve (vereinfacht mit <span class="math-inline">\alpha = 1</span>):</strong></p>
+        <div class="formula-block"><span class="math-display">\pi - \pi^e = -(u - u_n)</span></div>
+        <p><strong>Verlustfunktion der Regierung:</strong></p>
+        <div class="formula-block"><span class="math-display">L = \pi^2 + u^2</span></div>
+        <p><strong>Reaktionsfunktion der Zentralbank:</strong></p>
+        <div class="formula-block"><span class="math-display">\pi = \frac{1}{2}\pi^e + \frac{1}{2}u_n</span></div>
+        <p><strong>Zeitkonsistentes Gleichgewicht (Nash):</strong></p>
+        <div class="formula-block"><span class="math-display">\pi = \pi^e = u_n, \quad u = u_n \quad \Rightarrow \quad L_D = 2u_n^2</span></div>
+        <p><strong>Commitment-Lösung:</strong></p>
+        <div class="formula-block"><span class="math-display">\pi = \pi^e = 0, \quad u = u_n \quad \Rightarrow \quad L_A = u_n^2</span></div>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>6. Fiskalpolitik – Aspekte der Staatsverschuldung (Kap. 22)</h2>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th><th>Bemerkung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">B_t</span></td><td>Nominaler Schuldenstand zum Zeitpunkt <span class="math-inline">t</span></td><td>Bestandsgröße</td></tr>
+              <tr><td><span class="math-inline">G_t</span></td><td>Staatsausgaben in Periode <span class="math-inline">t</span></td><td>Stromgröße</td></tr>
+              <tr><td><span class="math-inline">T_t</span></td><td>Steuern minus Transfers in Periode <span class="math-inline">t</span></td><td>Stromgröße</td></tr>
+              <tr><td><span class="math-inline">i_t</span></td><td>Nominalzins in Periode <span class="math-inline">t</span></td><td></td></tr>
+              <tr><td><span class="math-inline">r_t</span></td><td>Realzins</td><td><span class="math-inline">r_t = i_t - \pi_t</span></td></tr>
+              <tr><td><span class="math-inline">\pi_t</span></td><td>Inflationsrate</td><td><span class="math-inline">\pi_t = \frac{P_t - P_{t-1}}{P_{t-1}}</span></td></tr>
+              <tr><td><span class="math-inline">b_t</span></td><td>Schuldenquote</td><td><span class="math-inline">b_t = \frac{B_t}{P_t Y_t}</span></td></tr>
+              <tr><td><span class="math-inline">d_t</span></td><td>Defizitquote</td><td><span class="math-inline">d_t = \frac{B_t - B_{t-1}}{P_t Y_t}</span></td></tr>
+              <tr><td><span class="math-inline">g_t</span></td><td>Reale Wachstumsrate</td><td><span class="math-inline">g_t = \frac{Y_t}{Y_{t-1}} - 1</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Staatliche Budgetrestriktion (nominal)</h3>
+        <div class="formula-block"><span class="math-display">B_t = (1 + i_t)B_{t-1} + (G_t - T_t)</span></div>
+        <div class="formula-block"><span class="math-display">\text{Defizit}_t = B_t - B_{t-1} = \underbrace{i_t B_{t-1}}_{\text{Zinszahlung}} + \underbrace{(G_t - T_t)}_{\text{Primärdefizit}}</span></div>
+        <h3>Inflationsbereinigte Budgetrestriktion</h3>
+        <div class="formula-block"><span class="math-display">\frac{B_t}{P_t} \approx (1 + r_t)\frac{B_{t-1}}{P_{t-1}} + \frac{G_t - T_t}{P_t}</span></div>
+        <h3>Dynamik der Schuldenquote</h3>
+        <div class="formula-block"><span class="math-display">b_t = \frac{1 + i_t}{(1 + g_t)(1 + \pi_t)} \cdot b_{t-1} + \frac{G_t - T_t}{P_t Y_t}</span></div>
+        <p><strong>Approximation:</strong></p>
+        <div class="formula-block"><span class="math-display">b_t - b_{t-1} = (r_t - g_t) \cdot b_{t-1} + \frac{G_t - T_t}{P_t Y_t}</span></div>
+        <h3>Konstante Defizitquote (Maastricht)</h3>
+        <div class="formula-block"><span class="math-display">b = \frac{d}{g + \pi}</span></div>
+        <p>z. B. <span class="math-inline">d = 3\%</span>, <span class="math-inline">g + \pi = 5\%</span> <span class="math-inline">\Rightarrow</span> <span class="math-inline">b = 60\%</span></p>
+        <h3>Stabilisierung der Staatsverschuldung</h3>
+        <p>Bei <span class="math-inline">B_t = B_{t-1} = B</span> für alle <span class="math-inline">t \geq 2</span>:</p>
+        <div class="formula-block"><span class="math-display">T_t - G_t = r \cdot B \quad \text{(Primärüberschuss = Zinszahlungen)}</span></div>
+        <h3>Volle Rückzahlung in Periode <span class="math-inline">t</span></h3>
+        <div class="formula-block"><span class="math-display">T_t - G_t = (1+r)^{t-1}</span></div>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>7. Geldpolitik – Praktische Umsetzung (Kap. 23)</h2>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th><th>Bemerkung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">M</span></td><td>Nominale Geldmenge</td><td></td></tr>
+              <tr><td><span class="math-inline">H</span></td><td>Geldbasis (Zentralbankgeld)</td><td><span class="math-inline">H = \text{Bargeld} + \text{Reserven der Geschäftsbanken}</span></td></tr>
+              <tr><td><span class="math-inline">M1</span></td><td>Bargeld + Sichteinlagen</td><td></td></tr>
+              <tr><td><span class="math-inline">M2, M3</span></td><td>Erweiterte Geldmengenaggregate</td><td></td></tr>
+              <tr><td><span class="math-inline">\pi^*</span></td><td>Inflationsziel der Zentralbank</td><td>z. B. EZB: knapp unter 2%</td></tr>
+              <tr><td><span class="math-inline">i^*</span></td><td>Nominales Zinsziel</td><td>Zinssatz bei <span class="math-inline">\pi = \pi^*</span></td></tr>
+              <tr><td><span class="math-inline">a</span></td><td>Gewicht für Inflationsabweichung (Taylor-Regel)</td><td><span class="math-inline">a &gt; 1</span> (Taylor-Prinzip)</td></tr>
+              <tr><td><span class="math-inline">b</span></td><td>Gewicht für Outputlücke / Arbeitslosigkeit</td><td><span class="math-inline">b &gt; 0</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Taylor-Regel (mit Arbeitslosigkeit)</h3>
+        <div class="formula-block"><span class="math-display">i_t = i^* + a(\pi_t - \pi^*) - b(u_t - u_n)</span></div>
+        <h3>Taylor-Regel (mit Output-Gap)</h3>
+        <div class="formula-block"><span class="math-display">i_t = i^* + a(\pi_t - \pi^*) + b(Y_t - Y_n)</span></div>
+        <p><strong>Taylors Parameterwerte:</strong> <span class="math-inline">a = 1{,}5</span>, <span class="math-inline">b = 0{,}5</span>, <span class="math-inline">i^* = 4\%</span>, <span class="math-inline">\pi^* = 2\%</span></p>
+        <h3>Divine Coincidence</h3>
+        <p>Bei <span class="math-inline">\pi = \pi^*</span>: <span class="math-inline">\pi^* - \pi^* = -\alpha(u_t - u_n)</span> <span class="math-inline">\Rightarrow</span> <span class="math-inline">u_t = u_n</span></p>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>8. Solow-Modell – Produktion, Sparen und Kapitalakkumulation (Kap. / Lange Frist I)</h2>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th><th>Bemerkung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">Y_t</span></td><td>Aggregierte Produktion in Periode <span class="math-inline">t</span></td><td></td></tr>
+              <tr><td><span class="math-inline">K_t</span></td><td>Kapitalbestand in Periode <span class="math-inline">t</span></td><td>Zustandsvariable (prädeterminiert)</td></tr>
+              <tr><td><span class="math-inline">N</span></td><td>Anzahl Beschäftigter</td><td>Exogen, konstant (im einfachen Modell)</td></tr>
+              <tr><td><span class="math-inline">I_t</span></td><td>Bruttoinvestitionen</td><td><span class="math-inline">I_t = S_t = s Y_t</span></td></tr>
+              <tr><td><span class="math-inline">S_t</span></td><td>Aggregierte Ersparnisse</td><td></td></tr>
+              <tr><td><span class="math-inline">C_t</span></td><td>Aggregierter Konsum</td><td><span class="math-inline">C_t = (1-s)Y_t</span></td></tr>
+              <tr><td><span class="math-inline">s</span></td><td>Sparquote</td><td>Exogen, konstant; <span class="math-inline">0 &lt; s &lt; 1</span></td></tr>
+              <tr><td><span class="math-inline">\delta</span></td><td>Abschreibungsrate</td><td></td></tr>
+              <tr><td><span class="math-inline">\alpha</span></td><td>Produktionselastizität des Kapitals</td><td>Cobb-Douglas: <span class="math-inline">0 &lt; \alpha &lt; 1</span>; empirisch <span class="math-inline">\approx 1/3</span></td></tr>
+              <tr><td><span class="math-inline">K_t/N</span></td><td>Kapitalintensität (Kapital pro Kopf)</td><td></td></tr>
+              <tr><td><span class="math-inline">Y_t/N</span></td><td>Produktion pro Kopf</td><td></td></tr>
+              <tr><td><span class="math-inline">K^*/N</span></td><td>Steady-State-Kapitalintensität</td><td></td></tr>
+              <tr><td><span class="math-inline">Y^*/N</span></td><td>Steady-State-Produktion pro Kopf</td><td></td></tr>
+              <tr><td><span class="math-inline">s_G</span></td><td>Goldene Sparquote</td><td>Maximiert Konsum pro Kopf im Steady State</td></tr>
+              <tr><td><span class="math-inline">f(k)</span></td><td>Pro-Kopf-Produktionsfunktion</td><td><span class="math-inline">f(K/N) = F(K/N, 1)</span></td></tr>
+              <tr><td><span class="math-inline">H</span></td><td>Humankapital (aggregiert)</td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Aggregierte Produktionsfunktion</h3>
+        <div class="formula-block"><span class="math-display">Y_t = F(K_t, N)</span></div>
+        <p><strong>Cobb-Douglas:</strong></p>
+        <div class="formula-block"><span class="math-display">Y_t = K_t^\alpha N^{1-\alpha}</span></div>
+        <p><strong>Pro-Kopf:</strong></p>
+        <div class="formula-block"><span class="math-display">\frac{Y_t}{N} = f\!\left(\frac{K_t}{N}\right) = \left(\frac{K_t}{N}\right)^\alpha</span></div>
+        <h3>Kapitalakkumulationsgleichung</h3>
+        <div class="formula-block"><span class="math-display">\Delta K_t = K_{t+1} - K_t = I_t - \delta K_t = s Y_t - \delta K_t</span></div>
+        <h3>Fundamentalgleichung des Solow-Modells (pro Kopf)</h3>
+        <div class="formula-block"><span class="math-display">\frac{K_{t+1}}{N} - \frac{K_t}{N} = s \cdot f\!\left(\frac{K_t}{N}\right) - \delta \cdot \frac{K_t}{N}</span></div>
+        <h3>Steady-State-Bedingung</h3>
+        <div class="formula-block"><span class="math-display">s \cdot f(k^*) = \delta \cdot k^*</span></div>
+        <p><strong>Bei Cobb-Douglas:</strong></p>
+        <div class="formula-block"><span class="math-display">\frac{K^*}{N} = \left(\frac{s}{\delta}\right)^{\frac{1}{1-\alpha}}, \qquad \frac{Y^*}{N} = \left(\frac{s}{\delta}\right)^{\frac{\alpha}{1-\alpha}}</span></div>
+        <h3>Goldene Sparquote</h3>
+        <div class="formula-block"><span class="math-display">\max_s \frac{C^*}{N} = (1-s)\left(\frac{s}{\delta}\right)^{\frac{\alpha}{1-\alpha}} \quad \Rightarrow \quad s_G = \alpha</span></div>
+        <h3>Produktionsfunktion mit Humankapital</h3>
+        <div class="formula-block"><span class="math-display">Y = F(K, H, N) \qquad \Rightarrow \qquad \frac{Y}{N} = f\!\left(\frac{K}{N}, \frac{H}{N}\right)</span></div>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>9. Wachstum und technischer Fortschritt (Kap. 12 / Lange Frist II)</h2>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Symbol</th><th>Bezeichnung</th><th>Bemerkung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">A_t</span></td><td>Technologieniveau in Periode <span class="math-inline">t</span></td><td>Exogen, wächst mit Rate <span class="math-inline">g_A</span></td></tr>
+              <tr><td><span class="math-inline">g_A</span></td><td>Rate des technischen Fortschritts</td><td><span class="math-inline">g_A = \frac{A_{t+1} - A_t}{A_t}</span></td></tr>
+              <tr><td><span class="math-inline">g_N</span></td><td>Bevölkerungswachstumsrate</td><td></td></tr>
+              <tr><td><span class="math-inline">g_K</span></td><td>Wachstumsrate des Kapitalstocks</td><td></td></tr>
+              <tr><td><span class="math-inline">g_Y</span></td><td>Wachstumsrate der Produktion</td><td></td></tr>
+              <tr><td><span class="math-inline">A_t N_t</span></td><td>Effektive Arbeitseinheiten</td><td></td></tr>
+              <tr><td><span class="math-inline">k_t</span></td><td>Kapital in eff. Arbeitseinheiten</td><td><span class="math-inline">k_t = \frac{K_t}{A_t N_t}</span></td></tr>
+              <tr><td><span class="math-inline">y_t</span></td><td>Output in eff. Arbeitseinheiten</td><td><span class="math-inline">y_t = \frac{Y_t}{A_t N_t}</span></td></tr>
+              <tr><td><span class="math-inline">\alpha_N</span></td><td>Produktionsanteil des Faktors Arbeit</td><td><span class="math-inline">\alpha_N = 1 - \alpha</span></td></tr>
+              <tr><td><span class="math-inline">\epsilon</span></td><td>Solow-Residuum</td><td>Geschätzter Beitrag von <span class="math-inline">g_A</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Produktionsfunktion mit techn. Fortschritt (arbeitsvermehrend)</h3>
+        <div class="formula-block"><span class="math-display">Y_t = F(K_t, A_t N_t)</span></div>
+        <p><strong>Cobb-Douglas:</strong></p>
+        <div class="formula-block"><span class="math-display">Y_t = K_t^\alpha (A_t N_t)^{1-\alpha}</span></div>
+        <p><strong>In effektiven Pro-Kopf-Einheiten:</strong></p>
+        <div class="formula-block"><span class="math-display">y_t = f(k_t) = k_t^\alpha</span></div>
+        <h3>Fundamentalgleichung mit technischem Fortschritt</h3>
+        <div class="formula-block"><span class="math-display">k_{t+1} - k_t = s \cdot f(k_t) - (\delta + g_A + g_N) \cdot k_t</span></div>
+        <h3>Steady State mit technischem Fortschritt</h3>
+        <div class="formula-block"><span class="math-display">s \cdot f(k^*) = (\delta + g_A + g_N) \cdot k^*</span></div>
+        <h3>Wachstumsraten im Steady State</h3>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Größe</th><th>Wachstumsrate</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">K/(AN)</span>, <span class="math-inline">Y/(AN)</span></td><td><span class="math-inline">0</span></td></tr>
+              <tr><td><span class="math-inline">K/N</span>, <span class="math-inline">Y/N</span> (Pro-Kopf)</td><td><span class="math-inline">g_A</span></td></tr>
+              <tr><td><span class="math-inline">N</span></td><td><span class="math-inline">g_N</span></td></tr>
+              <tr><td><span class="math-inline">K</span>, <span class="math-inline">Y</span> (Aggregate)</td><td><span class="math-inline">g_A + g_N</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Wachstumsraten-Zerlegung (Solow-Residuum)</h3>
+        <div class="formula-block"><span class="math-display">g_Y = \alpha \cdot g_K + (1-\alpha)(g_A + g_N)</span></div>
+        <p><strong>Pro-Kopf:</strong></p>
+        <div class="formula-block"><span class="math-display">g_Y - g_N = \frac{\alpha}{1-\alpha}(g_K - g_Y) + g_A</span></div>
+        <p><strong>Solow-Residuum:</strong></p>
+        <div class="formula-block"><span class="math-display">\hat{g}_A = \frac{\epsilon}{\alpha_N}</span></div>
+        <p>wobei <span class="math-inline">\epsilon</span> der Schätzfehler aus <span class="math-inline">g_Y = (1-\alpha_N)g_K + \alpha_N g_N + \epsilon</span> ist.</p>
+        <h3>Zinssatz im Steady State</h3>
+        <div class="formula-block"><span class="math-display">r_t = \frac{\partial Y}{\partial K} = f'(k_t)</span></div>
+        <p>Im Steady State: <span class="math-inline">k_t = k^*</span> = const. <span class="math-inline">\Rightarrow</span> <span class="math-inline">r</span> = const.</p>
+      </section>
+
+      <hr>
+
+      <section class="section">
+        <h2>Anhang: Zentrale Modellgleichungen im Überblick</h2>
+        <h3>IS-LM-ZP (offene VW, kurze Frist)</h3>
+        <div class="formeln-table-wrap">
+          <table class="formeln-table">
+            <thead>
+              <tr><th>Gleichung</th><th>Bezeichnung</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="math-inline">Y = C(Y-T) + I(Y,i) + G + NX(Y, Y^*, \frac{1+i}{1+i^*}\bar{E}^e)</span></td><td>IS-Kurve</td></tr>
+              <tr><td><span class="math-inline">i = \bar{i}</span></td><td>LM-Kurve</td></tr>
+              <tr><td><span class="math-inline">E = \frac{1+i}{1+i^*}\bar{E}^e</span></td><td>Zinsparitätenkurve (ZP)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h3>Outputverwendung (geschlossene VW, Solow)</h3>
+        <div class="formula-block"><span class="math-display">Y_t = C_t + S_t = C_t + I_t</span></div>
+        <h3>Fisher-Gleichung</h3>
+        <div class="formula-block"><span class="math-display">r = i - \pi^e</span></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script>
+    document.querySelectorAll('.math-inline').forEach(function(el) {
+      var latex = el.textContent.trim();
+      try {
+        katex.render(latex, el, { throwOnError: false, displayMode: false });
+      } catch (e) {}
+    });
+    document.querySelectorAll('.math-display').forEach(function(el) {
+      var latex = el.textContent.trim();
+      try {
+        katex.render(latex, el, { throwOnError: false, displayMode: true });
+      } catch (e) {}
+    });
+  </script>
+</body>
+</html>
